@@ -13,7 +13,7 @@ import { useSearch } from '@/context/search-context'
 import { useTheme } from '@/context/theme-context'
 import { ChevronRightIcon, LaptopIcon, MoonIcon, SunIcon } from 'lucide-react'
 import { useNavigate } from 'react-router'
-import { SidebarDataComponent } from './layout/data/sidebar-data'
+import { SidebarDataComponent } from '../layout/data/sidebar-data'
 import { ScrollArea } from './ui/scroll-area'
 
 export function CommandMenu() {

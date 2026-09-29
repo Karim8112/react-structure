@@ -4,10 +4,10 @@ import {
   NewspaperIcon
 } from 'lucide-react'
 import { Navigate, useRoutes } from 'react-router'
-import Layout from './components/layout'
-import { NavGroup } from './components/layout/types'
 import { useAuth } from './context/auth/authContext'
 import Login from './features/authentication/login'
+import Layout from './layout'
+import { NavGroup } from './layout/types'
 // import Register from './features/authentication/register'
 import Kanban from './features/kanban'
 import CreateKanban from './features/kanban/create'

@@ -1,5 +1,3 @@
-import { NavGroup } from '@/components/layout/nav-group'
-import { NavUser } from '@/components/layout/nav-user'
 import {
   Sidebar,
   SidebarContent,
@@ -11,6 +9,8 @@ import {
   SidebarRail
 } from '@/components/ui/sidebar'
 import { useAuth } from '@/context/auth/authContext'
+import { NavGroup } from '../layout/nav-group'
+import { NavUser } from '../layout/nav-user'
 import { SidebarDataComponent } from './data/sidebar-data'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

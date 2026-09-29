@@ -1,6 +1,6 @@
-import { API } from '@/API/auth/checktoken'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
+
 import {
   Form,
   FormControl,
@@ -16,6 +16,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 import { z } from 'zod'
+import RESTAxios, { RESTtype } from '../../API/auth/checktoken'
 
 const FormSchema = z.object({
   identifier: z.string(),
@@ -57,9 +58,8 @@ export default function Login() {
   //   }
   // })
 
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const response = await API.post('/login')
-
+  async function handleSubmission(data: z.infer<typeof FormSchema>) {
+    await RESTAxios({ path: '/login', type: RESTtype.post })
     const payload = {
       token: 'fake-token',
       user: {
@@ -71,6 +71,10 @@ export default function Login() {
     localStorage.setItem('auth', JSON.stringify(payload))
     dispatch({ type: 'login', payload })
     navigate('/')
+  }
+
+  function onSubmit(data: z.infer<typeof FormSchema>) {
+    handleSubmission(data)
   }
 
   return (

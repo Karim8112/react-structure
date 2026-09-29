@@ -17,7 +17,7 @@ import {
 import { ChevronRight } from 'lucide-react'
 import { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router'
-import { Badge } from '../ui/badge'
+import { Badge } from '../components/ui/badge'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,7 +25,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger
-} from '../ui/dropdown-menu'
+} from '../components/ui/dropdown-menu'
 import { NavCollapsible, NavItem, NavLink, type NavGroup } from './types'
 
 export function NavGroup({ title, children }: NavGroup) {
