@@ -1,13 +1,13 @@
-import { AppSidebar } from '@/components/layout/app-sidebar'
-import { Header } from '@/components/layout/header'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { SearchProvider } from '@/context/search-context'
 import { cn } from '@/lib/utils'
 import Cookies from 'js-cookie'
 import { Outlet } from 'react-router'
-import { Search } from '../search'
-import { ThemeSwitch } from '../theme-switch'
+import { Search } from '../components/search'
+import { ThemeSwitch } from '../components/theme-switch'
+import { AppSidebar } from './app-sidebar'
 import { SidebarDataComponent } from './data/sidebar-data'
+import { Header } from './header'
 
 export default function Layout() {
   const { sidebarData } = SidebarDataComponent()

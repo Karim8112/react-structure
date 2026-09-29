@@ -1,4 +1,4 @@
-import { API } from './api'
+import { API } from './checktoken'
 const BaseURL: string = import.meta.env.VITE_BASE_API_URL
 const path = '/login'
 export interface ILoginPayload {

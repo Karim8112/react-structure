@@ -1,3 +1,4 @@
+import { API } from '@/API/auth/checktoken'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import {
@@ -11,19 +12,20 @@ import {
 import { Input } from '@/components/ui/input'
 import { useAuth } from '@/context/auth/authContext'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 import { z } from 'zod'
 
 const FormSchema = z.object({
-  identifier: z.string().email(),
+  identifier: z.string(),
   password: z.string()
 })
 
 export default function Login() {
   const { dispatch } = useAuth()
   const navigate = useNavigate()
-
+  const [loading, setLoading] = useState<boolean>(false)
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -55,7 +57,9 @@ export default function Login() {
   //   }
   // })
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    const response = await API.post('/login')
+
     const payload = {
       token: 'fake-token',
       user: {
