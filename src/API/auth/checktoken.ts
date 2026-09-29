@@ -46,6 +46,7 @@ API.interceptors.response.use(
     if (response.status == 401) {
       // remove cookie
       // navigate to login page
+      //  return Promise.reject(error)
     }
   },
 
@@ -65,7 +66,7 @@ const RESTAxios = function (props: IREST) {
     props.setLoading(true)
     switch (props.type) {
       case RESTtype.post:
-        API.post({ URL: props.path })
+        // API.post<>()
         console.log('test')
     }
   })
