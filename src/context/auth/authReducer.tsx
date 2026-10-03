@@ -1,27 +1,23 @@
-import { IActionAuth, IStateAuth } from './authTypes'
-
-const authInfoLocalStorage = JSON.parse(localStorage.getItem('auth') || '{}')
+import { IActionAuth, IStateAuth } from '../../Model/IUser'
 
 export const initialState: IStateAuth = {
-  isAuthenticated: Object.keys(authInfoLocalStorage).length > 0,
-  authInfo:
-    Object.keys(authInfoLocalStorage).length !== 0
-      ? authInfoLocalStorage
-      : undefined
+  isAuthenticated: false,
+  User: undefined
 }
 
 export const reducer = (state: IStateAuth, action: IActionAuth): IStateAuth => {
   switch (action.type) {
     case 'login':
+      localStorage.setItem('token', JSON.stringify(action.token))
       return {
-        isAuthenticated: !!action.payload,
-        authInfo: action.payload
+        isAuthenticated: true,
+        User: action.user
       }
     case 'logout':
-      localStorage.clear()
+      localStorage.removeItem('token')
       return {
         isAuthenticated: false,
-        authInfo: undefined
+        User: undefined
       }
     default:
       return state

@@ -1,10 +1,5 @@
+import IUser from '@/Model/IUser'
 import { LucideIcon } from 'lucide-react'
-
-interface User {
-  name: string
-  email: string
-  avatar: string
-}
 
 interface App {
   name: string
@@ -36,10 +31,10 @@ interface NavGroup {
   children: NavItem[]
 }
 
-interface SidebarData {
-  user: User
+interface ISidebarData {
+  user: IUser
   app: App
   navGroups: NavGroup[]
 }
 
-export type { NavCollapsible, NavGroup, NavItem, NavLink, SidebarData }
+export type { ISidebarData, NavCollapsible, NavGroup, NavItem, NavLink }

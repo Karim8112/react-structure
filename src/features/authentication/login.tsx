@@ -1,6 +1,7 @@
+import PostAxios from '@/lib/PostAxios'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
-
 import {
   Form,
   FormControl,
@@ -12,14 +13,16 @@ import {
 import { Input } from '@/components/ui/input'
 import { useAuth } from '@/context/auth/authContext'
 import { zodResolver } from '@hookform/resolvers/zod'
+import Snackbar from '@mui/joy/Snackbar'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 import { z } from 'zod'
-import RESTAxios, { RESTtype } from '../../API/auth/checktoken'
+
+import { IUserLoginRequest, IUserLoginResponse } from '@/Model/IUser'
 
 const FormSchema = z.object({
-  identifier: z.string(),
+  userName: z.string(),
   password: z.string()
 })
 
@@ -27,54 +30,41 @@ export default function Login() {
   const { dispatch } = useAuth()
   const navigate = useNavigate()
   const [loading, setLoading] = useState<boolean>(false)
+  const [snackbarmsg, setSnackbarmsg] = useState<string>('')
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
+  const [snackbarColor, setSnackbarColor] = useState<'success' | 'danger'>(
+    'success'
+  )
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      identifier: '',
+      userName: '',
       password: ''
     }
   })
 
-  // const { mutate: loginMutation, isPending } = useMutation<
-  //   ILoginResponse,
-  //   Error,
-  //   ILoginPayload
-  // >({
-  //   mutationFn: login,
-  //   onSuccess: data => {
-  //     const payload = {
-  //       token: data.jwt,
-  //       user: {
-  //         username: data.user.username,
-  //         email: data.user.email
-  //       }
-  //     }
-
-  //     localStorage.setItem('auth', JSON.stringify(payload))
-  //     dispatch({ type: 'login', payload })
-  //   },
-  //   onError: error => {
-  //     console.error('Login gagal:', error)
-  //   }
-  // })
-
-  async function handleSubmission(data: z.infer<typeof FormSchema>) {
-    await RESTAxios({ path: '/login', type: RESTtype.post })
-    const payload = {
-      token: 'fake-token',
-      user: {
-        email: data.identifier,
-        username: data.identifier
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    await PostAxios<IUserLoginRequest, IUserLoginResponse>({
+      path: '/login',
+      payload: { userName: data.userName, password: data.password },
+      setLoading,
+      setSnackbarmsg: setSnackbarmsg,
+      setSnackbarOpen: setSnackbarOpen,
+      setSnackbarColor: setSnackbarColor,
+      onSuccess: data => {
+        const token = data.token
+        dispatch({
+          type: 'login',
+          token: token,
+          user: {
+            id: String(data.user.id),
+            name: data.user.name,
+            userName: data.user.userName
+          }
+        })
+        navigate('/')
       }
-    }
-
-    localStorage.setItem('auth', JSON.stringify(payload))
-    dispatch({ type: 'login', payload })
-    navigate('/')
-  }
-
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    handleSubmission(data)
+    })
   }
 
   return (
@@ -88,7 +78,7 @@ export default function Login() {
             <CardContent className='space-y-4'>
               <FormField
                 control={form.control}
-                name='identifier'
+                name='userName'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Username</FormLabel>
@@ -118,18 +108,25 @@ export default function Login() {
             </CardContent>
             <CardFooter className='flex flex-col space-y-4'>
               <Button type='submit' className='w-full'>
-                Login
+                {loading ? 'Loading...' : 'Login'}
               </Button>
-              {/* <p className='text-center text-sm'>
-                Don't have an account?{' '}
-                <Link to='/register' className='text-blue-500 hover:underline'>
-                  Register here
-                </Link>
-              </p> */}
             </CardFooter>
           </form>
         </Form>
       </Card>
+
+      <Snackbar
+        variant='outlined'
+        color={snackbarColor}
+        autoHideDuration={4000}
+        open={snackbarOpen}
+        // color={color}
+        onClose={() => {
+          setSnackbarOpen(false)
+        }}
+      >
+        {snackbarmsg}
+      </Snackbar>
     </div>
   )
 }

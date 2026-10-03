@@ -10,9 +10,9 @@ import {
   CommandItem,
   CommandList
 } from '@/components/ui/command'
-import { roles_assignment } from '@/lib/const'
 import { cn } from '@/lib/utils'
 import { Command as CommandPrimitive } from 'cmdk'
+import { roles_assignment } from '../../lib/const'
 import { CardContent } from '../kanban/model'
 
 type Framework = Record<'value' | 'label', string>

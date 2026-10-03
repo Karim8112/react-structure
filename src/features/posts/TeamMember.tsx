@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
-import { IPost } from '..'
+import { IPost } from './mainPost'
 
 export default function PostDetail() {
   console.log('render')
@@ -26,10 +26,10 @@ export default function PostDetail() {
       {!detailPost ? (
         <div>Loading...</div>
       ) : (
-        <>
+        <div className='bg-red-900'>
           <h3>{detailPost.title}</h3>
           <p>{detailPost.body}</p>
-        </>
+        </div>
       )}
     </div>
   )

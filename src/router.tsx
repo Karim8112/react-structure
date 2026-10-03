@@ -14,8 +14,8 @@ import CreateKanban from './features/kanban/create'
 import DetailKanban from './features/kanban/detail'
 import EditKanban from './features/kanban/edit'
 import { Payments } from './features/payment'
-import Post from './features/posts'
-import PostDetail from './features/posts/detail'
+import Payments2 from './features/posts/index'
+import PostDetail from './features/posts/TeamMember'
 
 const privateRoutes = [
   {
@@ -32,7 +32,7 @@ const privateRoutes = [
               {
                 title: 'Post List',
                 path: '/',
-                element: <Post />
+                element: <Payments2 />
               },
               {
                 hide: true,
@@ -87,10 +87,7 @@ const publicRoutes = [
     path: '/',
     element: <Login />
   },
-  // {
-  //   path: '/register',
-  //   element: <Register />
-  // },
+
   { path: '*', element: <Navigate to='/' replace /> }
 ]
 
@@ -99,6 +96,7 @@ export const DashboardMenu = (): NavGroup[] => {
 }
 
 export const RoutesApp = () => {
+  console.log('render: RoutesApp')
   const { state: authState } = useAuth()
 
   return useRoutes(authState.isAuthenticated ? privateRoutes : publicRoutes)

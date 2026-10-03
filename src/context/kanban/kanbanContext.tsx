@@ -1,4 +1,3 @@
-'use client'
 
 import { KanbanContent } from '@/components/kanban/model'
 import React, { ReactNode, createContext, useContext, useReducer } from 'react'

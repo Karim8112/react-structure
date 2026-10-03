@@ -1,14 +1,11 @@
+import { useAuth } from '@/context/auth/authContext'
 import { DashboardMenu } from '@/router'
 import { Command } from 'lucide-react'
-import { NavGroup, NavItem, type SidebarData } from '../types'
+import { NavGroup, NavItem, type ISidebarData } from '../types'
 
-interface ISidebarDataComponent {
-  sidebarData: SidebarData
-}
-
-export const SidebarDataComponent = (): ISidebarDataComponent => {
+export const SidebarData = (): ISidebarData => {
   const routes = DashboardMenu()
-  console.log({ routes })
+  const { state } = useAuth()
 
   type NavGroups = NavGroup[]
 
@@ -32,18 +29,15 @@ export const SidebarDataComponent = (): ISidebarDataComponent => {
   }
 
   return {
-    sidebarData: {
-      user: {
-        name: 'username',
-        email: 'user@gmail.com',
-        avatar: '/avatars/shadcn.jpg'
-      },
-      app: {
-        name: 'Dashboard Starter Kit',
-        logo: Command,
-        plan: 'Vite + ShadcnUI'
-      },
-      navGroups: removeHiddenItems(routes)
-    }
+    user: {
+      name: state.User?.name as string,
+      userName: state.User?.userName as string
+    },
+    app: {
+      name: 'AARAN Company',
+      logo: Command,
+      plan: 'Admin'
+    },
+    navGroups: removeHiddenItems(routes)
   }
 }

@@ -1,6 +1,6 @@
 import React, { ReactNode, createContext, useContext, useReducer } from 'react'
+import { IActionAuth, IStateAuth } from '../../Model/IUser'
 import { initialState, reducer } from './authReducer'
-import { IActionAuth, IStateAuth } from './authTypes'
 
 interface ContextProps {
   state: IStateAuth

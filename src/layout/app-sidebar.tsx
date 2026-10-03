@@ -8,19 +8,18 @@ import {
   SidebarMenuItem,
   SidebarRail
 } from '@/components/ui/sidebar'
-import { useAuth } from '@/context/auth/authContext'
+import IUser from '@/Model/IUser'
 import { NavGroup } from '../layout/nav-group'
 import { NavUser } from '../layout/nav-user'
-import { SidebarDataComponent } from './data/sidebar-data'
+import { SidebarData } from './data/sidebar-data'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { state: authState } = useAuth()
-  const { sidebarData } = SidebarDataComponent()
+  const sidebarData = SidebarData()
 
-  const userInfo = {
+  const userInfo: IUser = {
     ...sidebarData.user,
-    email: sidebarData.user.email,
-    name: authState.authInfo?.user.username || sidebarData.user.name
+    userName: sidebarData.user.userName,
+    name: sidebarData.user.name
   }
 
   return (

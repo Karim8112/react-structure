@@ -6,11 +6,11 @@ import { Outlet } from 'react-router'
 import { Search } from '../components/search'
 import { ThemeSwitch } from '../components/theme-switch'
 import { AppSidebar } from './app-sidebar'
-import { SidebarDataComponent } from './data/sidebar-data'
+import { SidebarData } from './data/sidebar-data'
 import { Header } from './header'
 
 export default function Layout() {
-  const { sidebarData } = SidebarDataComponent()
+  const sidebarData = SidebarData()
 
   const defaultOpen = Cookies.get('sidebar:state') !== 'false'
 
@@ -30,6 +30,7 @@ export default function Layout() {
             'group-data-[scroll-locked=1]/body:has-[main.fixed-main]:h-svh'
           )}
         >
+          {/* <Toaster /> */}
           <Header>
             <span className='mr-2 truncate font-semibold'>
               {sidebarData.app.name}
