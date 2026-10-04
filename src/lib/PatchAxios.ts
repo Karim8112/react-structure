@@ -1,6 +1,6 @@
-import { BaseURL } from '@/assets/constants'
 import axios from 'axios'
 import React from 'react'
+import { BaseURL } from '../routes_Apis'
 
 export type IREST<RequestBody, ResponseBody> = {
   path: string

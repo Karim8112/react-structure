@@ -1,8 +1,10 @@
 import GetAxios from '@/lib/GetAxios'
 import ITeam from '@/Model/ITeam'
+import { APIs } from '@/routes_Apis'
 import { useEffect, useState } from 'react'
+import IApi from '../../../Model/IApi'
 export function useTeam() {
-  const [data, setData] = useState<ITeam[]>([])
+  const [data, setData] = useState<IApi<ITeam> | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [snackbarmsg, setSnackbarmsg] = useState<string>('')
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
@@ -10,8 +12,8 @@ export function useTeam() {
     'success'
   )
   useEffect(() => {
-    GetAxios<ITeam[]>({
-      path: '/team',
+    GetAxios<IApi<ITeam>>({
+      path: APIs.team,
       setLoading,
       onSuccess: teams => setData(teams),
       setSnackbarmsg,
@@ -19,10 +21,6 @@ export function useTeam() {
       setSnackbarColor
     })
   }, [])
-
-  useEffect(() => {
-    console.log(`this is the team members`, data)
-  }, [data])
 
   return { data, loading, snackbarmsg, snackbarOpen, snackbarColor }
 }

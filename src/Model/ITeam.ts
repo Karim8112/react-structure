@@ -1,5 +1,12 @@
+type IExprience = {
+  role: string
+  period: string
+  company: string
+  description?: string
+}
+
 export default interface ITeam {
-  id?: string
+  _id?: string
   title?: string
   address?: string
   email?: string
@@ -10,4 +17,5 @@ export default interface ITeam {
   skills?: string[]
   education?: string[]
   languages?: string[]
+  experience?: IExprience[]
 }

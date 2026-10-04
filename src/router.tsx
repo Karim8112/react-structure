@@ -1,81 +1,75 @@
-import {
-  DollarSignIcon,
-  LayoutDashboardIcon,
-  NewspaperIcon
-} from 'lucide-react'
+import { NewspaperIcon } from 'lucide-react'
 import { Navigate, useRoutes } from 'react-router'
 import { useAuth } from './context/auth/authContext'
 import Login from './features/authentication/login'
 import Layout from './layout'
 import { NavGroup } from './layout/types'
 // import Register from './features/authentication/register'
-import Kanban from './features/kanban'
-import CreateKanban from './features/kanban/create'
-import DetailKanban from './features/kanban/detail'
-import EditKanban from './features/kanban/edit'
-import { Payments } from './features/payment'
-import Payments2 from './features/posts/index'
-import PostDetail from './features/posts/TeamMember'
+import Projects from './features/projects'
+import AddUpdateMember from './features/team/pages/AddUpdateMember'
+import Team from './features/team/pages/index'
+import TeamMember from './features/team/pages/TeamMember'
+
+import { routes } from './routes_Apis'
 
 const privateRoutes = [
   {
-    path: '/',
+    path: routes.main,
     element: <Layout />,
     children: [
       {
         title: 'General',
         children: [
           {
-            title: 'Post',
+            title: 'Team Members',
             icon: NewspaperIcon,
             children: [
               {
-                title: 'Post List',
-                path: '/',
-                element: <Payments2 />
+                title: 'Add new member',
+                path: routes.add_update_member,
+                element: <AddUpdateMember />
+              },
+              {
+                title: 'All members',
+                path: routes.main,
+                element: <Team />
               },
               {
                 hide: true,
-                title: 'Post Detail',
-                path: '/post/:postId',
-                element: <PostDetail />
+                title: 'team member detail',
+                path: `${routes.team}/:memberId`,
+                element: <TeamMember />
               }
             ]
           },
           {
-            title: 'Payment',
-            path: '/payment',
-            icon: DollarSignIcon,
-            element: <Payments />
-          },
-          {
-            title: 'Kanban',
-            icon: LayoutDashboardIcon,
+            title: 'Projects',
+            icon: NewspaperIcon,
             children: [
               {
-                title: 'Kanban ',
-                path: '/kanban',
-                element: <Kanban />
+                title: 'Add new',
+                path: routes.add_update_project
+                // element: <PostDetail />
               },
               {
-                title: 'Kanban Create',
-                path: '/kanban/create',
-                element: <CreateKanban />
-              },
-              {
-                hide: true,
-                title: 'Kanban Detail',
-                path: '/kanban/detail/:id',
-                element: <DetailKanban />
+                title: 'All Projects',
+                path: routes.projects,
+                element: <Projects />
               },
               {
                 hide: true,
-                title: 'Kanban Edit',
-                path: '/kanban/edit/:id',
-                element: <EditKanban />
+                title: 'project detail',
+                path: `${routes.projects}/:projectId`
+                // element: <Projects />
               }
             ]
           }
+          // {
+          //   title: 'Payment',
+          //   path: '/payment',
+          //   icon: DollarSignIcon,
+          //   element: <Payments />
+          // },
         ]
       }
     ]

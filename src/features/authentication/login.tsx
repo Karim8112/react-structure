@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router'
 import { z } from 'zod'
 
 import { IUserLoginRequest, IUserLoginResponse } from '@/Model/IUser'
+import { APIs, routes } from '../../routes_Apis'
 
 const FormSchema = z.object({
   userName: z.string(),
@@ -45,7 +46,7 @@ export default function Login() {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     await PostAxios<IUserLoginRequest, IUserLoginResponse>({
-      path: '/login',
+      path: APIs.login,
       payload: { userName: data.userName, password: data.password },
       setLoading,
       setSnackbarmsg: setSnackbarmsg,
@@ -62,7 +63,7 @@ export default function Login() {
             userName: data.user.userName
           }
         })
-        navigate('/')
+        navigate(routes.main)
       }
     })
   }
