@@ -2,9 +2,11 @@ export const BaseURL = 'https://pink-ant-682660.hostingersite.com/api/v1'
 
 export enum routes {
   main = '/',
-  add_update_member = '/team/add-update-member',
+  add_member = '/team/add-member',
+  update_member = '/team/update-member',
   team = '/team',
-  add_update_project = '/project/add-update-project',
+  add_project = '/project/add-project',
+  update_project = '/project/update-project',
   projects = '/projects'
 }
 

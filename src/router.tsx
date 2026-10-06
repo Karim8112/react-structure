@@ -6,9 +6,10 @@ import Layout from './layout'
 import { NavGroup } from './layout/types'
 // import Register from './features/authentication/register'
 import Projects from './features/projects'
-import AddUpdateMember from './features/team/pages/AddUpdateMember'
+import AddMember from './features/team/pages/AddMember'
 import Team from './features/team/pages/index'
 import TeamMember from './features/team/pages/TeamMember'
+import UpdateMember from './features/team/pages/UpdateMember'
 
 import { routes } from './routes_Apis'
 
@@ -26,8 +27,8 @@ const privateRoutes = [
             children: [
               {
                 title: 'Add new member',
-                path: routes.add_update_member,
-                element: <AddUpdateMember />
+                path: routes.add_member,
+                element: <AddMember />
               },
               {
                 title: 'All members',
@@ -39,6 +40,12 @@ const privateRoutes = [
                 title: 'team member detail',
                 path: `${routes.team}/:memberId`,
                 element: <TeamMember />
+              },
+              {
+                hide: true,
+                title: 'edit member',
+                path: `${routes.update_member}`,
+                element: <UpdateMember />
               }
             ]
           },
@@ -48,7 +55,7 @@ const privateRoutes = [
             children: [
               {
                 title: 'Add new',
-                path: routes.add_update_project
+                path: routes.add_project
                 // element: <PostDetail />
               },
               {

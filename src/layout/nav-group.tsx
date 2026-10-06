@@ -66,6 +66,7 @@ const NavBadge = ({ children }: { children: ReactNode }) => (
 
 const SidebarMenuLink = ({ item, href }: { item: NavLink; href: string }) => {
   const { setOpenMobile } = useSidebar()
+
   return (
     <SidebarMenuItem>
       <SidebarMenuButton
@@ -73,7 +74,12 @@ const SidebarMenuLink = ({ item, href }: { item: NavLink; href: string }) => {
         isActive={checkIsActive(href, item)}
         tooltip={item.title}
       >
-        <Link to={item.path} onClick={() => setOpenMobile(false)}>
+        <Link
+          to={item.path}
+          onClick={() => {
+            setOpenMobile(false)
+          }}
+        >
           {item.icon && <item.icon />}
           <span>{item.title}</span>
           {item.badge && <NavBadge>{item.badge}</NavBadge>}
