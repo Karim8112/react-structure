@@ -12,9 +12,9 @@ export type ProjectType =
 export interface IProject {
   _id: number
   name: string
-  Donor?: string
+  donor?: string
   value?: string
-  startDate?: Date
-  endDate?: Date
+  startDate?: string
+  endDate?: string
   projectType: ProjectType
 }
