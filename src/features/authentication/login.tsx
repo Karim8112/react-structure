@@ -54,6 +54,7 @@ export default function Login() {
       setSnackbarColor: setSnackbarColor,
       onSuccess: data => {
         const token = data.token
+        console.log(`this is data token inside on success:`, token)
         dispatch({
           type: 'login',
           token: token,

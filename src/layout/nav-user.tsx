@@ -15,12 +15,14 @@ import {
 } from '@/components/ui/sidebar'
 import { useAuth } from '@/context/auth/authContext'
 import IUser from '@/Model/IUser'
+import { routes } from '@/routes_Apis'
 import { ChevronsUpDown, LogOut } from 'lucide-react'
+import { useNavigate } from 'react-router'
 
 export function NavUser({ user }: { user: IUser }) {
   const { isMobile } = useSidebar()
   const { dispatch } = useAuth()
-
+  const navigate = useNavigate()
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -51,7 +53,7 @@ export function NavUser({ user }: { user: IUser }) {
               <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
                 <Avatar className='h-8 w-8 rounded-lg'>
                   {/* <AvatarImage src={user?.avatar} alt={user.name} /> */}
-                  <AvatarFallback className='rounded-lg'>SN</AvatarFallback>
+                  <AvatarFallback className='rounded-lg'>BA</AvatarFallback>
                 </Avatar>
                 <div className='grid flex-1 text-left text-sm leading-tight'>
                   <span className='truncate font-semibold'>{user.name}</span>
@@ -60,7 +62,12 @@ export function NavUser({ user }: { user: IUser }) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => dispatch({ type: 'logout' })}>
+            <DropdownMenuItem
+              onClick={() => {
+                dispatch({ type: 'logout' })
+                navigate(routes.main)
+              }}
+            >
               <LogOut />
               Log out
             </DropdownMenuItem>

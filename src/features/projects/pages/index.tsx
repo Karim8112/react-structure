@@ -42,20 +42,23 @@ import { useProject } from '../hooks/useProject'
 export default function Project() {
   const { setProject } = useFormContext()
   const navigate = useNavigate()
+  const Project = useProject()
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState<string | null>(
     null
   )
-  const DeleteHook = useDelete({ setOpen: setDeleteDialogOpen })
+  //
+  const [hiddenRow, setHiddenRows] = React.useState<string[]>([])
+  const filteredData = React.useMemo(() => {
+    const rawData = Project.data?.data || []
+    return rawData.filter(
+      (item: IProject) => !hiddenRow.includes(item._id as string)
+    )
+  }, [Project.data?.data, hiddenRow])
+  //
 
-  const Project = useProject()
-  // const DeleteHook = useDelete({
-  //   setOpen: setDeleteDialogOpen
-  // })
+  const DeleteHook = useDelete({ setOpen: setDeleteDialogOpen, setHiddenRows })
 
-  // React.useEffect(() => {
-  //   console.log('this is the project data: \n', Project)
-  // }, [Project])
-
+  //
   const columns: ColumnDef<IProject>[] = [
     {
       accessorKey: '_id',
@@ -236,7 +239,7 @@ export default function Project() {
   const [rowSelection, setRowSelection] = React.useState({})
 
   const table = useReactTable({
-    data: Project.data?.data || [],
+    data: filteredData || [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

@@ -1,11 +1,12 @@
-import { useAuth } from '@/context/auth/authContext'
+import IUser from '@/Model/IUser'
 import { DashboardMenu } from '@/router'
 import { Command } from 'lucide-react'
 import { NavGroup, NavItem, type ISidebarData } from '../types'
 
 export const SidebarData = (): ISidebarData => {
   const routes = DashboardMenu()
-  const { state } = useAuth()
+  // const { state } = useAuth()
+  const userObject: IUser = JSON.parse(localStorage.getItem('user') || 'null')
 
   type NavGroups = NavGroup[]
 
@@ -30,8 +31,8 @@ export const SidebarData = (): ISidebarData => {
 
   return {
     user: {
-      name: state.User?.name as string,
-      userName: state.User?.userName as string
+      name: userObject.name,
+      userName: userObject.userName
     },
     app: {
       name: 'AARAN Company',

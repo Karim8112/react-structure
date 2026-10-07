@@ -1,6 +1,5 @@
 import { NewspaperIcon } from 'lucide-react'
 import { Navigate, useRoutes } from 'react-router'
-import { useAuth } from './context/auth/authContext'
 import Login from './features/authentication/login'
 import AddMember from './features/team/pages/AddMember'
 import Team from './features/team/pages/index'
@@ -101,8 +100,8 @@ export const DashboardMenu = (): NavGroup[] => {
 }
 
 export const RoutesApp = () => {
-  console.log('render: RoutesApp')
-  const { state: authState } = useAuth()
-
-  return useRoutes(authState.isAuthenticated ? privateRoutes : publicRoutes)
+  // const { state: authState } = useAuth()
+  const token = JSON.parse(localStorage.getItem('token') ?? 'null')
+  console.log('this is the token now:', token)
+  return useRoutes(token ? privateRoutes : publicRoutes)
 }

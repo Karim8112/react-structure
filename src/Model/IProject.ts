@@ -35,7 +35,7 @@ export const ProjectFormSchema = z.object({
   value: z.string().optional().or(z.literal('')),
   startDate: z.string().optional().or(z.literal('')),
   endDate: z.string().optional().or(z.literal('')),
-  projectType: z.string().optional().or(z.literal(''))
+  projectType: z.string().min(1, 'Project Type is required')
 })
 
 export type ProjectFormValues = z.infer<typeof ProjectFormSchema>

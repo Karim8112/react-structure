@@ -5,9 +5,11 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { APIs, routes } from '../../../routes_Apis'
 export function useDelete({
-  setOpen
+  setOpen,
+  setHiddenRows
 }: {
   setOpen: React.Dispatch<React.SetStateAction<null | string>>
+  setHiddenRows: React.Dispatch<React.SetStateAction<string[]>>
 }) {
   const [loading, setLoading] = useState<boolean>(false)
   const [snackbarmsg, setSnackbarmsg] = useState<string>('')
@@ -30,6 +32,9 @@ export function useDelete({
         setTimeout(() => {
           navigate(routes.projects)
         }, 1000)
+        setHiddenRows(hiddenRows => {
+          return [...hiddenRows, memberId]
+        })
         setOpen(null)
       }
     })
