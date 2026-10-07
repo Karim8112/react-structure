@@ -13,6 +13,7 @@ type ButtonOptions = {
   className?: string
   Icon?: JSX.Element
   text: string
+  key?: string
 }
 
 export type DialogOptions = {
@@ -20,6 +21,7 @@ export type DialogOptions = {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   content: string
   title: string
+  key?: string
   Buttons?: {
     btnText: string
     onClick?: () => void
@@ -61,10 +63,14 @@ const MainDialog = function ({
   dialogOptions: DialogOptions
 }) {
   return (
-    <Dialog open={dialogOptions.open}>
+    <Dialog
+      key={dialogOptions.key}
+      open={dialogOptions.open}
+      onOpenChange={dialogOptions.setOpen}
+    >
       <DialogTrigger>
         <button
-          //   key={`${btn.type}-${btn.text}-${index}`}
+          key={btnOptions.key}
           type='button'
           onClick={() => dialogOptions.setOpen(true)}
           className={btnOptions.className ?? ''}
@@ -73,7 +79,7 @@ const MainDialog = function ({
           <span>{btnOptions.text}</span>
         </button>
       </DialogTrigger>
-      <DialogContent onBlur={() => dialogOptions.setOpen(false)}>
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>{dialogOptions.title}</DialogTitle>
           <DialogDescription>{dialogOptions.content}</DialogDescription>

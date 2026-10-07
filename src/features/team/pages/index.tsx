@@ -30,6 +30,7 @@ import {
   TableRow
 } from '@/components/ui/table'
 
+import MainDialog from '@/components/MainDialog'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { routes } from '@/routes_Apis'
 import Snackbar from '@mui/joy/Snackbar'
@@ -118,6 +119,7 @@ export default function Team() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const [open, setOpen] = React.useState<boolean>(false)
 
   const table = useReactTable({
     data: Team.data?.data || [],
@@ -141,6 +143,15 @@ export default function Team() {
   return (
     <>
       {' '}
+      <MainDialog
+        btnOptions={{ text: 'test', className: '' }}
+        dialogOptions={{
+          content: 'test',
+          title: 'test',
+          open: open,
+          setOpen: setOpen
+        }}
+      />
       <div className='w-full'>
         <div className='flex items-center py-4'>
           <Input

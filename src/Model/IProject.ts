@@ -1,3 +1,5 @@
+import { z } from 'zod'
+
 export type ProjectType =
   | 'Supplement'
   | 'Rehabilitation'
@@ -10,7 +12,7 @@ export type ProjectType =
   | 'Infrastructure'
 
 export interface IProject {
-  _id: number
+  _id?: string
   name: string
   donor?: string
   value?: string
@@ -18,3 +20,22 @@ export interface IProject {
   endDate?: string
   projectType: ProjectType
 }
+
+export const ProjectFormSchema = z.object({
+  name: z
+    .string()
+    .min(1, 'Name is required')
+    .max(30, 'Title must be 30 characters or less'),
+  donor: z
+    .string()
+    .max(30, 'Donor name must be 30 characters or less')
+    .optional()
+    .or(z.literal('')),
+
+  value: z.string().optional().or(z.literal('')),
+  startDate: z.string().optional().or(z.literal('')),
+  endDate: z.string().optional().or(z.literal('')),
+  projectType: z.string().optional().or(z.literal(''))
+})
+
+export type ProjectFormValues = z.infer<typeof ProjectFormSchema>

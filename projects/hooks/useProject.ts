@@ -1,8 +1,8 @@
 import GetAxios from '@/lib/GetAxios'
 import { IProject } from '@/Model/IProject'
-import { APIs } from '@/routes_Apis'
 import { useEffect, useState } from 'react'
 import IApi from '../../../Model/IApi'
+import { APIs } from '../../../routes_Apis'
 export function useProject() {
   const [data, setData] = useState<IApi<IProject> | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
@@ -15,7 +15,7 @@ export function useProject() {
     GetAxios<IApi<IProject>>({
       path: APIs.project,
       setLoading,
-      onSuccess: teams => setData(teams),
+      onSuccess: projects => setData(projects),
       setSnackbarmsg,
       setSnackbarOpen,
       setSnackbarColor
