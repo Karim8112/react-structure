@@ -15,6 +15,7 @@ export default interface ITeam {
   phoneNumberS?: string[]
   summary?: string
   imageLeft?: string
+  imageRight?: string
   tags?: string[]
   skills?: string[]
   education?: string[]
@@ -44,7 +45,8 @@ export const TeamFormSchema = z.object({
     .min(1, 'Email is required')
     .email('Please enter a valid email address'),
   summary: z.string().min(1, 'Summary is required'),
-  imageLeft: z.string().optional().or(z.literal('')),
+  imageLeft: z.union([z.instanceof(File), z.string(), z.null()]).optional(),
+  imageRight: z.union([z.instanceof(File), z.string(), z.null()]).optional(),
 
   // Dynamic list fields (defaulting to empty arrays)
   phoneNumberS: z.array(z.string()).default([]),

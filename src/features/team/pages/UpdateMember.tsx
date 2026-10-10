@@ -25,8 +25,8 @@ import { Input } from '@/components/ui/input'
 import Snackbar from '@mui/joy/Snackbar'
 
 import { DynamicExperienceList } from '@/components/DynamicExp'
+import ImageUploadField from '@/components/imageUpload'
 import { useFormContext } from '@/context/form/formContext'
-import ITeam from '@/Model/ITeam'
 import { DynamicStringList } from '../../../components/DynamicStringList'
 import { TeamFormSchema, TeamFormValues } from '../../../Model/ITeam'
 
@@ -47,7 +47,8 @@ export default function UpdateMember() {
       address: member?.address,
       email: member?.email,
       summary: member?.summary,
-      imageLeft: '',
+      imageLeft: member?.imageLeft ?? '',
+      imageRight: member?.imageRight ?? '',
       phoneNumberS: member?.phoneNumberS,
       tags: member?.tags,
       skills: member?.skills,
@@ -59,7 +60,7 @@ export default function UpdateMember() {
 
   async function onSubmit(data: TeamFormValues) {
     // Sanitize payload by removing blank string entries
-    const payload: ITeam = {
+    const payload: Record<string, unknown> = {
       ...data,
       phoneNumberS: data.phoneNumberS.filter(Boolean),
       tags: data.tags.filter(Boolean),
@@ -68,14 +69,23 @@ export default function UpdateMember() {
       languages: data.languages.filter(Boolean)
     }
 
-    await PatchAxios<ITeam, unknown>({
+    // Only pass image files if they are newly selected Files;
+    // if left as existing string URLs or empty strings, avoid sending empty keys
+    if (!(payload.imageLeft instanceof File)) {
+      delete payload.imageLeft
+    }
+    if (!(payload.imageRight instanceof File)) {
+      delete payload.imageRight
+    }
+
+    await PatchAxios<Record<string, unknown>, unknown>({
       path: APIs.team,
       payload,
       setLoading,
       setSnackbarmsg,
       setSnackbarOpen,
       setSnackbarColor,
-      isFormData: true,
+      isFormData: true, // Activates multipart/form-data with objectToFormData
       onSuccess: () => {
         navigate(`${routes.team}/${member?._id}`)
       },
@@ -91,7 +101,65 @@ export default function UpdateMember() {
         </CardHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-            <CardContent className='space-y-4'>
+            <CardContent className='space-y-6'>
+              {/* ========================================================= */}
+              {/* 1. VISUAL ASSETS SECTION: imageLeft & imageRight          */}
+              {/* ========================================================= */}
+              <div className='space-y-3 rounded-xl'>
+                <p className='text-xs text-slate-500'>
+                  Select portrait images (max 5MB each). Changes overwrite
+                  previous Cloudinary files.
+                </p>
+
+                <div className='flex flex-wrap items-start gap-6 pt-1'>
+                  {/* Left Image Upload */}
+                  <FormField
+                    control={form.control}
+                    name='imageLeft'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <ImageUploadField
+                            name='imageLeft'
+                            label='Left Image (Profile / Main)'
+                            currentImageUrl={member?.imageLeft}
+                            value={field.value}
+                            onChange={file => field.onChange(file)}
+                            disabled={loading}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Right Image Upload */}
+                  <FormField
+                    control={form.control}
+                    name='imageRight'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <ImageUploadField
+                            name='imageRight'
+                            label='Right Image (Badge / Secondary)'
+                            currentImageUrl={member?.imageRight}
+                            value={field.value}
+                            onChange={file => field.onChange(file)}
+                            disabled={loading}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+
+              {/* ========================================================= */}
+              {/* 2. TEXT FIELDS SECTION                                    */}
+              {/* ========================================================= */}
+
               {/* Title (Required, max 20) */}
               <FormField
                 control={form.control}
