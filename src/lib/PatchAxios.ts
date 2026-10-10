@@ -1,13 +1,15 @@
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import React from 'react'
 import { BaseURL } from '../routes_Apis'
+import objectToFormData from './ObjectToFormData'
 
 export type IREST<RequestBody, ResponseBody> = {
   path: string
   payload: RequestBody
   objectId: string
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
-
+  isFormData?: boolean
+  onUploadProgress?: (percentage: number) => void
   onSuccess?: (data: ResponseBody) => void
   onError?: (error: unknown) => void
   setSnackbarmsg?: React.Dispatch<React.SetStateAction<string>>
@@ -60,10 +62,36 @@ const PatchAxios = async function <RequestBody, ResponseBody>(
   props.setLoading(true)
 
   try {
-    const data: ResponseBody = await API.patch(
-      props.path.concat('/').concat(props.objectId),
-      props.payload
-    )
+    const isMultipart = props.isFormData || props.payload instanceof FormData
+
+    // 2. Prepare payload: auto-convert object to FormData if needed
+    let finalPayload: unknown = props.payload
+    if (isMultipart && !(props.payload instanceof FormData)) {
+      finalPayload = objectToFormData(props.payload as Record<string, unknown>)
+    }
+
+    // 3. Configure request headers and optional progress tracking
+    const config: AxiosRequestConfig = {}
+
+    if (isMultipart) {
+      config.headers = {
+        'Content-Type': 'multipart/form-data'
+      }
+
+      if (props.onUploadProgress) {
+        config.onUploadProgress = progressEvent => {
+          if (progressEvent.total) {
+            const percent = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            )
+            props.onUploadProgress!(percent)
+          }
+        }
+      }
+    }
+
+    const path = props.path.concat('/').concat(props.objectId)
+    const data: ResponseBody = await API.patch(path, finalPayload, config)
     let successMsg = 'Success'
     if (data !== null && typeof data === 'object' && 'message' in data) {
       successMsg = String(data.message)

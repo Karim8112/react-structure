@@ -75,6 +75,7 @@ export default function UpdateMember() {
       setSnackbarmsg,
       setSnackbarOpen,
       setSnackbarColor,
+      isFormData: true,
       onSuccess: () => {
         navigate(`${routes.team}/${member?._id}`)
       },
