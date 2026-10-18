@@ -1,5 +1,6 @@
 import { IProject } from '@/Model/IProject'
 import ITeam from '@/Model/ITeam'
+import IVideo from '@/Model/IVideo'
 import React, { ReactNode, createContext, useContext, useState } from 'react'
 
 interface ContextProps {
@@ -7,6 +8,8 @@ interface ContextProps {
   setMember: React.Dispatch<React.SetStateAction<ITeam | null>>
   project: IProject | null
   setProject: React.Dispatch<React.SetStateAction<IProject | null>>
+  video: IVideo | null
+  setVideo: React.Dispatch<React.SetStateAction<IVideo | null>>
 }
 
 const FormContext = createContext<ContextProps | undefined>(undefined)
@@ -14,8 +17,11 @@ const FormContext = createContext<ContextProps | undefined>(undefined)
 export const FormProvider = ({ children }: { children: ReactNode }) => {
   const [member, setMember] = useState<ITeam | null>(null)
   const [project, setProject] = useState<IProject | null>(null)
+  const [video, setVideo] = useState<IVideo | null>(null)
   return (
-    <FormContext.Provider value={{ member, setMember, project, setProject }}>
+    <FormContext.Provider
+      value={{ member, setMember, project, setProject, video, setVideo }}
+    >
       {children}
     </FormContext.Provider>
   )

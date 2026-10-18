@@ -7,11 +7,15 @@ export enum routes {
   team = '/team',
   add_project = '/project/add-project',
   update_project = '/project/update-project',
-  projects = '/projects'
+  projects = '/project',
+  add_video = '/video/add-video',
+  update_video = '/video/update-video',
+  videos = '/video'
 }
 
 export enum APIs {
   login = '/login',
   team = '/team',
-  project = '/project'
+  project = '/project',
+  video = '/video'
 }

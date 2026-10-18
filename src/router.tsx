@@ -13,6 +13,9 @@ import UpdateProject from './features/projects/pages/UpdateProject'
 import Layout from './layout'
 import { NavGroup } from './layout/types'
 
+import Video from './features/videos/pages'
+import AddVideo from './features/videos/pages/AddVideo'
+import UpdateVideo from './features/videos/pages/UpdateVideo'
 import { routes } from './routes_Apis'
 
 const privateRoutes = [
@@ -71,6 +74,29 @@ const privateRoutes = [
                 title: 'edit project',
                 path: `${routes.update_project}`,
                 element: <UpdateProject />
+              }
+            ]
+          },
+          {
+            title: 'Videos',
+            icon: NewspaperIcon,
+            children: [
+              {
+                title: 'Add new Video',
+                path: routes.add_video,
+                element: <AddVideo />
+              },
+              {
+                title: 'All Videos',
+                path: routes.videos,
+                element: <Video />
+              },
+
+              {
+                hide: true,
+                title: 'edit project',
+                path: `${routes.update_video}`,
+                element: <UpdateVideo />
               }
             ]
           }
