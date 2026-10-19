@@ -1,11 +1,14 @@
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import React from 'react'
 import { BaseURL } from '../routes_Apis'
+import objectToFormData from './ObjectToFormData'
 
 export type IREST<RequestBody, ResponseBody> = {
   path: string
   payload: RequestBody
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
+  isFormData?: boolean
+  onUploadProgress?: (percentage: number) => void
 
   onSuccess?: (data: ResponseBody) => void
   onError?: (error: unknown) => void
@@ -59,7 +62,31 @@ const PostAxios = async function <RequestBody, ResponseBody>(
   props.setLoading(true)
 
   try {
-    const data: ResponseBody = await API.post(props.path, props.payload)
+    const isMultipart = props.isFormData || props.payload instanceof FormData
+    let finalPayload: unknown = props.payload
+    if (isMultipart && !(props.payload instanceof FormData)) {
+      finalPayload = objectToFormData(props.payload as Record<string, unknown>)
+    }
+    const config: AxiosRequestConfig = {}
+
+    if (isMultipart) {
+      config.headers = {
+        'Content-Type': 'multipart/form-data'
+      }
+
+      if (props.onUploadProgress) {
+        config.onUploadProgress = progressEvent => {
+          if (progressEvent.total) {
+            const percent = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            )
+            props.onUploadProgress!(percent)
+          }
+        }
+      }
+    }
+
+    const data: ResponseBody = await API.post(props.path, finalPayload, config)
     let successMsg = 'Success'
     if (data !== null && typeof data === 'object' && 'message' in data) {
       successMsg = String(data.message)

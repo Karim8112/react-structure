@@ -25,7 +25,7 @@ import { Input } from '@/components/ui/input'
 import Snackbar from '@mui/joy/Snackbar'
 
 import { DynamicExperienceList } from '@/components/DynamicExp'
-import ITeam from '@/Model/ITeam'
+import ImageUploadField from '@/components/imageUpload'
 import { DynamicStringList } from '../../../components/DynamicStringList'
 import { TeamFormSchema, TeamFormValues } from '../../../Model/ITeam'
 
@@ -46,17 +46,19 @@ export default function AddMember() {
       email: '',
       summary: '',
       imageLeft: '',
+      imageRight: '',
       phoneNumberS: [],
       tags: [],
       skills: [],
       education: [],
-      languages: []
+      languages: [],
+      experience: []
     }
   })
 
   async function onSubmit(data: TeamFormValues) {
     // Sanitize payload by removing blank string entries
-    const payload: ITeam = {
+    const payload: Record<string, unknown> = {
       ...data,
       phoneNumberS: data.phoneNumberS.filter(Boolean),
       tags: data.tags.filter(Boolean),
@@ -65,13 +67,23 @@ export default function AddMember() {
       languages: data.languages.filter(Boolean)
     }
 
-    await PostAxios<ITeam, unknown>({
+    // Only pass image files if they are newly selected Files;
+    // if left as empty strings/null, delete keys to prevent empty values in FormData
+    if (!(payload.imageLeft instanceof File)) {
+      delete payload.imageLeft
+    }
+    if (!(payload.imageRight instanceof File)) {
+      delete payload.imageRight
+    }
+
+    await PostAxios<Record<string, unknown>, unknown>({
       path: APIs.team,
       payload,
       setLoading,
       setSnackbarmsg,
       setSnackbarOpen,
       setSnackbarColor,
+      isFormData: true, // Activates multipart/form-data with objectToFormData
       onSuccess: () => {
         navigate(routes.main)
       }
@@ -86,7 +98,63 @@ export default function AddMember() {
         </CardHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-            <CardContent className='space-y-4'>
+            <CardContent className='space-y-6'>
+              {/* ========================================================= */}
+              {/* 1. VISUAL ASSETS SECTION: imageLeft & imageRight          */}
+              {/* ========================================================= */}
+              <div className='space-y-3 rounded-xl'>
+                <p className='text-xs text-slate-500'>
+                  Select portrait images (max 5MB each). Changes overwrite
+                  previous Cloudinary files.
+                </p>
+
+                <div className='flex flex-wrap items-start gap-6 pt-1'>
+                  {/* Left Image Upload */}
+                  <FormField
+                    control={form.control}
+                    name='imageLeft'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <ImageUploadField
+                            name='imageLeft'
+                            label='Left Image (Profile / Main)'
+                            value={field.value}
+                            onChange={file => field.onChange(file)}
+                            disabled={loading}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Right Image Upload */}
+                  <FormField
+                    control={form.control}
+                    name='imageRight'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <ImageUploadField
+                            name='imageRight'
+                            label='Right Image (Badge / Secondary)'
+                            value={field.value}
+                            onChange={file => field.onChange(file)}
+                            disabled={loading}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+
+              {/* ========================================================= */}
+              {/* 2. TEXT FIELDS SECTION                                    */}
+              {/* ========================================================= */}
+
               {/* Title (Required, max 20) */}
               <FormField
                 control={form.control}
@@ -131,7 +199,7 @@ export default function AddMember() {
                 name='address'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Address </FormLabel>
+                    <FormLabel>Address</FormLabel>
                     <FormControl>
                       <Input
                         placeholder='Address location'
@@ -200,7 +268,7 @@ export default function AddMember() {
 
             <CardFooter>
               <Button type='submit' className='w-full' disabled={loading}>
-                {loading ? 'Submitting...' : 'Create'}
+                {loading ? 'Submitting...' : 'Create Member'}
               </Button>
             </CardFooter>
           </form>

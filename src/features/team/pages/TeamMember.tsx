@@ -122,7 +122,7 @@ export default function PostDetail() {
                 <img
                   src={team_member.data?.imageLeft}
                   alt={team_member.data?.title}
-                  className='min-h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105'
+                  className='min-h-[600px] w-full max-w-96 object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105'
                 />
                 <div className='bg-linear-to-t absolute inset-0 from-black/80 via-black/20 to-transparent' />
 
