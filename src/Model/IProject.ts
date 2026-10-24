@@ -19,6 +19,7 @@ export interface IProject {
   startDate?: string
   endDate?: string
   projectType: ProjectType
+  images?: File[]
 }
 
 export const ProjectFormSchema = z.object({
@@ -35,7 +36,8 @@ export const ProjectFormSchema = z.object({
   value: z.string().optional().or(z.literal('')),
   startDate: z.string().optional().or(z.literal('')),
   endDate: z.string().optional().or(z.literal('')),
-  projectType: z.string().min(1, 'Project Type is required')
+  projectType: z.string().min(1, 'Project Type is required'),
+  images: z.array(z.instanceof(File)).optional()
 })
 
 export type ProjectFormValues = z.infer<typeof ProjectFormSchema>

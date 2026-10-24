@@ -24,6 +24,7 @@ import {
 import { Input } from '@/components/ui/input'
 import Snackbar from '@mui/joy/Snackbar'
 
+import MultiImageUploadField from '@/components/MultipleImageUpload'
 import { IProject } from '@/Model/IProject'
 import { ProjectFormSchema, ProjectFormValues } from '../../../Model/IProject'
 
@@ -44,20 +45,36 @@ export default function AddProject() {
       value: '',
       startDate: '',
       endDate: '',
-      projectType: ''
+      projectType: '',
+      images: []
     }
   })
 
   async function onSubmit(data: ProjectFormValues) {
     // Sanitize payload by removing blank string entries
+
+    const Files: File[] = []
+
+    if (data?.images) {
+      data.images.forEach(item => {
+        if (item instanceof File) {
+          Files.push(item)
+        }
+      })
+    }
     const payload: IProject = {
       ...data,
       projectType: data.projectType as IProject['projectType']
     }
 
+    if (Files.length > 0) {
+      payload.images = Files // objectToFormData appends each file under 'images'
+    }
+
     await PostAxios<IProject, unknown>({
       path: APIs.project,
       payload,
+      isFormData: true,
       setLoading,
       setSnackbarmsg,
       setSnackbarOpen,
@@ -89,6 +106,27 @@ export default function AddProject() {
                         placeholder='Project name'
                         maxLength={30}
                         {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* upload images */}
+              <FormField
+                control={form.control}
+                name='images'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <MultiImageUploadField
+                        name='images'
+                        label='Project Image Gallery'
+                        value={field.value}
+                        onChange={files => field.onChange(files)}
+                        maxFiles={10}
+                        disabled={loading}
                       />
                     </FormControl>
                     <FormMessage />
