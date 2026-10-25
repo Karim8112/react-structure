@@ -24,6 +24,7 @@ import {
 import { Input } from '@/components/ui/input'
 import Snackbar from '@mui/joy/Snackbar'
 
+import ImageUploadField from '@/components/imageUpload'
 import MultiImageUploadField from '@/components/MultipleImageUpload'
 import { IProject } from '@/Model/IProject'
 import { ProjectFormSchema, ProjectFormValues } from '../../../Model/IProject'
@@ -46,7 +47,8 @@ export default function AddProject() {
       startDate: '',
       endDate: '',
       projectType: '',
-      images: []
+      images: [],
+      mainImage: undefined
     }
   })
 
@@ -113,19 +115,17 @@ export default function AddProject() {
                 )}
               />
 
-              {/* upload images */}
               <FormField
                 control={form.control}
-                name='images'
+                name='mainImage'
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <MultiImageUploadField
-                        name='images'
-                        label='Project Image Gallery'
+                      <ImageUploadField
+                        name='imageLeft'
+                        label='Left Image (Profile / Main)'
                         value={field.value}
-                        onChange={files => field.onChange(files)}
-                        maxFiles={10}
+                        onChange={file => field.onChange(file)}
                         disabled={loading}
                       />
                     </FormControl>
@@ -201,6 +201,27 @@ export default function AddProject() {
                     <FormLabel>Value</FormLabel>
                     <FormControl>
                       <Input placeholder='300 $' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* upload images */}
+              <FormField
+                control={form.control}
+                name='images'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <MultiImageUploadField
+                        name='images'
+                        label='Project Image Gallery'
+                        value={field.value}
+                        onChange={files => field.onChange(files)}
+                        maxFiles={10}
+                        disabled={loading}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
