@@ -19,7 +19,8 @@ type ButtonOptions = {
 export type DialogOptions = {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  content: string
+  content?: string
+  Element?: React.ReactNode
   title: string
   key?: string
   Buttons?: {
@@ -82,7 +83,11 @@ const MainDialog = function ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{dialogOptions.title}</DialogTitle>
-          <DialogDescription>{dialogOptions.content}</DialogDescription>
+          <DialogDescription>
+            {dialogOptions.content}
+            <div className='mb-2'></div>
+            {dialogOptions.Element}
+          </DialogDescription>
         </DialogHeader>
         {dialogOptions.Buttons && (
           <DialogFooter className='bg- sm:justify-end'>

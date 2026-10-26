@@ -71,6 +71,7 @@ export default function Project() {
       header: ({ column }) => {
         return (
           <Button
+            className='p-0'
             variant='ghost'
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
@@ -90,6 +91,7 @@ export default function Project() {
       header: ({ column }) => {
         return (
           <Button
+            className='p-0'
             variant='ghost'
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
@@ -109,6 +111,7 @@ export default function Project() {
       header: ({ column }) => {
         return (
           <Button
+            className='p-0'
             variant='ghost'
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
@@ -128,6 +131,7 @@ export default function Project() {
       header: ({ column }) => {
         return (
           <Button
+            className='p-0'
             variant='ghost'
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
@@ -137,7 +141,11 @@ export default function Project() {
         )
       },
       cell: ({ row }) => (
-        <div className='lowercase'>{row.getValue('startDate')}</div>
+        <div className='lowercase'>
+          {row.original.startDate
+            ? new Date(row.original.startDate).toLocaleDateString()
+            : ''}
+        </div>
       )
     },
     {
@@ -145,6 +153,7 @@ export default function Project() {
       header: ({ column }) => {
         return (
           <Button
+            className='p-0'
             variant='ghost'
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
@@ -154,7 +163,11 @@ export default function Project() {
         )
       },
       cell: ({ row }) => (
-        <div className='lowercase'>{row.getValue('endDate')}</div>
+        <div className='lowercase'>
+          {row.original.endDate
+            ? new Date(row.original.endDate).toLocaleDateString()
+            : ''}
+        </div>
       )
     },
     {
@@ -162,22 +175,27 @@ export default function Project() {
       header: ({ column }) => {
         return (
           <Button
+            className='p-0'
             variant='ghost'
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
-            End Date
+            Project Type
             <ArrowUpDown />
           </Button>
         )
       },
       cell: ({ row }) => (
-        <div className='lowercase'>{row.getValue('projectType')}</div>
+        <div className='lowercase'>{row.original.projectType.name}</div>
       )
     },
     {
       accessorKey: 'name',
       header: () => {
-        return <Button variant='ghost'>Actions</Button>
+        return (
+          <Button className='p-0' variant='ghost'>
+            Actions
+          </Button>
+        )
       },
       cell: ({ row }) => {
         const rowId = row.getValue('_id') as string

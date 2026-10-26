@@ -48,7 +48,7 @@ const columns: ColumnDef<ITeam>[] = [
     accessorKey: 'imageLeft',
     header: () => {
       return (
-        <Button variant='ghost'>
+        <Button className='p-0' variant='ghost'>
           Image
           <ArrowUpDown />
         </Button>
@@ -77,6 +77,7 @@ const columns: ColumnDef<ITeam>[] = [
     header: ({ column }) => {
       return (
         <Button
+          className='p-0'
           variant='ghost'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
@@ -96,6 +97,7 @@ const columns: ColumnDef<ITeam>[] = [
     header: ({ column }) => {
       return (
         <Button
+          className='p-0'
           variant='ghost'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >

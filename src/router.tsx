@@ -9,6 +9,7 @@ import UpdateMember from './features/team/pages/UpdateMember'
 //
 import Project from './features/projects/pages'
 import AddProject from './features/projects/pages/AddProject'
+import ProjectTypes from './features/projects/pages/ProjectTypes'
 import UpdateProject from './features/projects/pages/UpdateProject'
 import Layout from './layout'
 import { NavGroup } from './layout/types'
@@ -58,6 +59,11 @@ const privateRoutes = [
             title: 'Projects',
             icon: NewspaperIcon,
             children: [
+              {
+                title: 'Project Types',
+                path: routes.project_types,
+                element: <ProjectTypes />
+              },
               {
                 title: 'Add new Project',
                 path: routes.add_project,
@@ -128,6 +134,5 @@ export const DashboardMenu = (): NavGroup[] => {
 export const RoutesApp = () => {
   // const { state: authState } = useAuth()
   const token = JSON.parse(localStorage.getItem('token') ?? 'null')
-  console.log('this is the token now:', token)
   return useRoutes(token ? privateRoutes : publicRoutes)
 }

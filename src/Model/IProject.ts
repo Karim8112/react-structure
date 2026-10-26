@@ -1,15 +1,9 @@
 import { z } from 'zod'
 
-export type ProjectType =
-  | 'Supplement'
-  | 'Rehabilitation'
-  | 'Arch. Restoration'
-  | 'Sewage Replacement'
-  | 'Schools Rehab'
-  | 'Water Supply'
-  | 'Supply'
-  | 'Rehab/Solar'
-  | 'Infrastructure'
+export interface ProjectType {
+  _id: string
+  name: string
+}
 
 export interface IProject {
   _id?: string
@@ -19,6 +13,18 @@ export interface IProject {
   startDate?: string
   endDate?: string
   projectType: ProjectType
+  images?: File[]
+  mainImage: File
+}
+
+export interface IProjectRequest {
+  _id?: string
+  name: string
+  donor?: string
+  value?: string
+  startDate?: string
+  endDate?: string
+  projectType: string
   images?: File[]
   mainImage: File
 }

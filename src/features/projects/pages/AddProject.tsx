@@ -26,11 +26,21 @@ import Snackbar from '@mui/joy/Snackbar'
 
 import ImageUploadField from '@/components/imageUpload'
 import MultiImageUploadField from '@/components/MultipleImageUpload'
-import { IProject } from '@/Model/IProject'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
+import { IProjectRequest } from '@/Model/IProject'
 import { ProjectFormSchema, ProjectFormValues } from '../../../Model/IProject'
+import { useProjectTypes } from '../hooks/useProjectType'
 
 export default function AddProject() {
   const navigate = useNavigate()
+  const ProjectTypes = useProjectTypes()
   const [loading, setLoading] = useState<boolean>(false)
   const [snackbarmsg, setSnackbarmsg] = useState<string>('')
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
@@ -64,16 +74,15 @@ export default function AddProject() {
         }
       })
     }
-    const payload: IProject = {
-      ...data,
-      projectType: data.projectType as IProject['projectType']
+    const payload: IProjectRequest = {
+      ...data
     }
 
     if (Files.length > 0) {
       payload.images = Files // objectToFormData appends each file under 'images'
     }
 
-    await PostAxios<IProject, unknown>({
+    await PostAxios<IProjectRequest, unknown>({
       path: APIs.project,
       payload,
       isFormData: true,
@@ -142,7 +151,29 @@ export default function AddProject() {
                   <FormItem>
                     <FormLabel>project Type *</FormLabel>
                     <FormControl>
-                      <Input placeholder='Supplement' {...field} />
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        value={field.value || ''}
+                      >
+                        <SelectTrigger className='w-full'>
+                          <SelectValue placeholder='select project type'></SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {ProjectTypes.loading
+                              ? '...Loading'
+                              : ProjectTypes.data?.data.map(projectType => (
+                                  <SelectItem
+                                    key={projectType._id}
+                                    value={projectType._id}
+                                  >
+                                    {projectType.name}
+                                  </SelectItem>
+                                ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

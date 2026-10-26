@@ -22,14 +22,25 @@ import {
   FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
+
 import Snackbar from '@mui/joy/Snackbar'
 
 import { useFormContext } from '@/context/form/formContext'
-import { IProject } from '@/Model/IProject'
+import { IProjectRequest } from '@/Model/IProject'
 import { ProjectFormSchema, ProjectFormValues } from '../../../Model/IProject'
+import { useProjectTypes } from '../hooks/useProjectType'
 
 export default function UpdateProject() {
   const { project } = useFormContext()
+  const ProjectTypes = useProjectTypes()
   const navigate = useNavigate()
   const [loading, setLoading] = useState<boolean>(false)
   const [snackbarmsg, setSnackbarmsg] = useState<string>('')
@@ -46,18 +57,15 @@ export default function UpdateProject() {
       value: project?.value || '',
       startDate: project?.startDate || '',
       endDate: project?.endDate || '',
-      projectType: project?.projectType || ''
+      projectType: project?.projectType.name || ''
     }
   })
 
   async function onSubmit(data: ProjectFormValues) {
     // Sanitize payload by removing blank string entries
-    const payload: IProject = {
-      ...data,
-      projectType: data.projectType as IProject['projectType']
-    }
+    const payload: IProjectRequest = data
 
-    await PatchAxios<IProject, unknown>({
+    await PatchAxios<IProjectRequest, unknown>({
       path: APIs.project,
       payload,
       setLoading,
@@ -99,7 +107,6 @@ export default function UpdateProject() {
                 )}
               />
 
-              {/* Email (Required, valid email) */}
               <FormField
                 control={form.control}
                 name='projectType'
@@ -107,7 +114,29 @@ export default function UpdateProject() {
                   <FormItem>
                     <FormLabel>project Type *</FormLabel>
                     <FormControl>
-                      <Input placeholder='Supplement' {...field} />
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        value={field.value || ''}
+                      >
+                        <SelectTrigger className='w-full'>
+                          <SelectValue placeholder='select project type'></SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {ProjectTypes.loading
+                              ? '...Loading'
+                              : ProjectTypes.data?.data.map(projectType => (
+                                  <SelectItem
+                                    key={projectType._id}
+                                    value={projectType._id}
+                                  >
+                                    {projectType.name}
+                                  </SelectItem>
+                                ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
