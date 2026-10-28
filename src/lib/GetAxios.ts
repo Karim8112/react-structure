@@ -1,16 +1,19 @@
+import { IFilter } from '@/Model/IApi'
 import axios from 'axios'
 import React from 'react'
 import { BaseURL } from '../routes_Apis'
+import urlParams from './urlParams'
 
 export type IREST<ResponseBody> = {
   path: string
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
-
   onSuccess?: (data: ResponseBody) => void
   onError?: (error: unknown) => void
   setSnackbarmsg?: React.Dispatch<React.SetStateAction<string>>
   setSnackbarOpen?: React.Dispatch<React.SetStateAction<boolean>>
   setSnackbarColor?: React.Dispatch<React.SetStateAction<'success' | 'danger'>>
+  filter?: IFilter[]
+  page?: number
 }
 
 export const API = axios.create({
@@ -56,7 +59,16 @@ const GetAxios = async function <ResponseBody>(props: IREST<ResponseBody>) {
   props.setLoading(true)
 
   try {
-    const data: ResponseBody = await API.get(props.path)
+    const sendingParamsToString: { filter?: IFilter[]; page?: number } = {}
+    //
+    if (props.filter?.length) sendingParamsToString.filter = props.filter
+    if (props.page) sendingParamsToString.page = props.page
+
+    const paramString = urlParams(sendingParamsToString)
+    //
+    const finalPath = paramString ? props.path.concat(paramString) : props.path
+
+    const data: ResponseBody = await API.get(finalPath)
     let successMsg = 'Success'
     if (data !== null && typeof data === 'object' && 'message' in data) {
       successMsg = String(data.message)

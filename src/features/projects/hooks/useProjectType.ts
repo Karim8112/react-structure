@@ -7,7 +7,7 @@ import IApi from '../../../Model/IApi'
 export function useProjectTypes({
   setOpen
 }: {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>
 }) {
   const [data, setData] = useState<IApi<ProjectType> | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
@@ -54,13 +54,13 @@ export function useProjectTypes({
         // setHiddenRows(hiddenRows => {
         //   return [...hiddenRows, id]
         // })
-        setOpen(false)
+        if (setOpen) setOpen(false)
       },
       onError() {
         setTimeout(() => {
           setSnackbarOpen(false)
         }, 3000)
-        setOpen(false)
+        if (setOpen) setOpen(false)
       }
     })
   }

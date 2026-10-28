@@ -7,8 +7,8 @@ import TeamMember from './features/team/pages/TeamMember'
 import UpdateMember from './features/team/pages/UpdateMember'
 
 //
-import Project from './features/projects/pages'
 import AddProject from './features/projects/pages/AddProject'
+import Project from './features/projects/pages/index2'
 import ProjectTypes from './features/projects/pages/ProjectTypes'
 import UpdateProject from './features/projects/pages/UpdateProject'
 import Layout from './layout'

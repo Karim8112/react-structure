@@ -1,8 +1,14 @@
 import GetAxios from '@/lib/GetAxios'
 import { IProject } from '@/Model/IProject'
 import { APIs } from '@/routes_Apis'
-import { useEffect, useState } from 'react'
-import IApi from '../../../Model/IApi'
+import { useState } from 'react'
+import IApi, { IFilter } from '../../../Model/IApi'
+
+interface getDataProps {
+  filter?: IFilter
+  page?: number
+}
+
 export function useProject() {
   const [data, setData] = useState<IApi<IProject> | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
@@ -11,8 +17,15 @@ export function useProject() {
   const [snackbarColor, setSnackbarColor] = useState<'success' | 'danger'>(
     'success'
   )
-  useEffect(() => {
-    GetAxios<IApi<IProject>>({
+
+  interface IAPIforProject extends IApi<IProject> {
+    total: number
+  }
+
+  const getData = async function (props: getDataProps) {
+    GetAxios<IAPIforProject>({
+      filter: props.filter ? [{ ...props.filter }] : [],
+      page: props.page,
       path: APIs.project,
       setLoading,
       onSuccess: teams => setData(teams),
@@ -20,7 +33,7 @@ export function useProject() {
       setSnackbarOpen,
       setSnackbarColor
     })
-  }, [])
+  }
 
-  return { data, loading, snackbarmsg, snackbarOpen, snackbarColor }
+  return { getData, data, loading, snackbarmsg, snackbarOpen, snackbarColor }
 }

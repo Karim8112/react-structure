@@ -8,13 +8,13 @@ export interface ProjectType {
 export interface IProject {
   _id?: string
   name: string
-  donor?: string
-  value?: string
-  startDate?: string
-  endDate?: string
+  mainImage: string
+  quickOverview: string
+  summary?: string
+  organization?: string
+  imagesBefore?: string[]
+  imagesAfter?: string[]
   projectType: ProjectType
-  images?: File[]
-  mainImage: File
 }
 
 export interface IProjectRequest {
