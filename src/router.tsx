@@ -11,9 +11,11 @@ import AddProject from './features/projects/pages/AddProject'
 import Project from './features/projects/pages/index2'
 import ProjectTypes from './features/projects/pages/ProjectTypes'
 import UpdateProject from './features/projects/pages/UpdateProject'
+
 import Layout from './layout'
 import { NavGroup } from './layout/types'
 
+import ShowProject from './features/projects/pages/ShowProject'
 import Video from './features/videos/pages'
 import AddVideo from './features/videos/pages/AddVideo'
 import UpdateVideo from './features/videos/pages/UpdateVideo'
@@ -52,6 +54,12 @@ const privateRoutes = [
                 title: 'edit member',
                 path: `${routes.update_member}`,
                 element: <UpdateMember />
+              },
+              {
+                hide: true,
+                title: 'show project',
+                path: `${routes.show_project}/:projectId`,
+                element: <ShowProject />
               }
             ]
           },

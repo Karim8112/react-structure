@@ -1,4 +1,4 @@
-import PatchAxios from '@/lib/PatchAxios'
+import PostAxios from '@/lib/PostAxios'
 import { APIs, routes } from '@/routes_Apis'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
@@ -22,6 +22,10 @@ import {
   FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import Snackbar from '@mui/joy/Snackbar'
+
+import ImageUploadField from '@/components/imageUpload'
+import MultiImageUploadField from '@/components/MultipleImageUpload'
 import {
   Select,
   SelectContent,
@@ -30,18 +34,16 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
-
-import Snackbar from '@mui/joy/Snackbar'
-
+import { TextArea } from '@/components/ui/textArea'
 import { useFormContext } from '@/context/form/formContext'
 import { IProjectRequest } from '@/Model/IProject'
 import { ProjectFormSchema, ProjectFormValues } from '../../../Model/IProject'
 import { useProjectTypes } from '../hooks/useProjectType'
 
-export default function UpdateProject() {
-  const { project } = useFormContext()
-  const ProjectTypes = useProjectTypes()
+export default function AddProject() {
   const navigate = useNavigate()
+  const { project } = useFormContext()
+  const ProjectTypes = useProjectTypes({})
   const [loading, setLoading] = useState<boolean>(false)
   const [snackbarmsg, setSnackbarmsg] = useState<string>('')
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
@@ -53,29 +55,61 @@ export default function UpdateProject() {
     resolver: zodResolver(ProjectFormSchema),
     defaultValues: {
       name: project?.name,
-      donor: project?.donor || '',
-      value: project?.value || '',
-      startDate: project?.startDate || '',
-      endDate: project?.endDate || '',
-      projectType: project?.projectType.name || ''
+      quickOverview: project?.quickOverview,
+      summary: project?.summary,
+      organization: project?.organization,
+      mainImage: undefined,
+      imagesBefore: [],
+      imagesAfter: [],
+      projectType: ''
     }
   })
 
   async function onSubmit(data: ProjectFormValues) {
     // Sanitize payload by removing blank string entries
-    const payload: IProjectRequest = data
 
-    await PatchAxios<IProjectRequest, unknown>({
+    const IBFiles: File[] = []
+    const IAFiles: File[] = []
+
+    if (data?.imagesBefore) {
+      data.imagesBefore.forEach(item => {
+        if (item instanceof File) {
+          IBFiles.push(item)
+        }
+      })
+    }
+
+    if (data?.imagesAfter) {
+      data.imagesAfter.forEach(item => {
+        if (item instanceof File) {
+          IAFiles.push(item)
+        }
+      })
+    }
+
+    const payload: IProjectRequest = {
+      ...data
+    }
+
+    if (IBFiles.length > 0) {
+      payload.imagesBefore = IBFiles // objectToFormData appends each file under 'images'
+    }
+
+    if (IAFiles.length > 0) {
+      payload.imagesAfter = IAFiles // objectToFormData appends each file under 'images'
+    }
+
+    await PostAxios<IProjectRequest, unknown>({
       path: APIs.project,
       payload,
+      isFormData: true,
       setLoading,
       setSnackbarmsg,
       setSnackbarOpen,
       setSnackbarColor,
       onSuccess: () => {
         navigate(routes.projects)
-      },
-      objectId: project?._id as string
+      }
     })
   }
 
@@ -83,7 +117,7 @@ export default function UpdateProject() {
     <div className='flex min-h-screen items-center justify-center p-4'>
       <Card className='w-full max-w-2xl'>
         <CardHeader>
-          <CardTitle>Update Project</CardTitle>
+          <CardTitle>Create New Project</CardTitle>
         </CardHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
@@ -107,6 +141,26 @@ export default function UpdateProject() {
                 )}
               />
 
+              <FormField
+                control={form.control}
+                name='mainImage'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <ImageUploadField
+                        name='main project image'
+                        label='Left Image (Profile / Main)'
+                        value={field.value}
+                        onChange={file => field.onChange(file)}
+                        disabled={loading}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Email (Required, valid email) */}
               <FormField
                 control={form.control}
                 name='projectType'
@@ -146,10 +200,10 @@ export default function UpdateProject() {
               {/* Address (Optional, max 100) */}
               <FormField
                 control={form.control}
-                name='donor'
+                name='organization'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Donor </FormLabel>
+                    <FormLabel>Organization </FormLabel>
                     <FormControl>
                       <Input placeholder='Unicef' maxLength={100} {...field} />
                     </FormControl>
@@ -161,12 +215,15 @@ export default function UpdateProject() {
               {/* Summary (Required) */}
               <FormField
                 control={form.control}
-                name='startDate'
+                name='quickOverview'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Start date</FormLabel>
+                    <FormLabel>Quick Overview</FormLabel>
                     <FormControl>
-                      <Input placeholder='2018/05/20' {...field} />
+                      <TextArea
+                        placeholder='هذا نص سريع يعرض عند استعراض كل المشاريع'
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -175,26 +232,56 @@ export default function UpdateProject() {
 
               <FormField
                 control={form.control}
-                name='endDate'
+                name='summary'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>End date</FormLabel>
+                    <FormLabel>Project Description</FormLabel>
                     <FormControl>
-                      <Input placeholder='2020/05/20' {...field} />
+                      <TextArea
+                        className='h-96'
+                        placeholder='هذا وصف المشروع بالكامل'
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
+              {/* upload images */}
               <FormField
                 control={form.control}
-                name='value'
+                name='imagesBefore'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Value</FormLabel>
                     <FormControl>
-                      <Input placeholder='300 $' {...field} />
+                      <MultiImageUploadField
+                        name='images'
+                        label='Images Before'
+                        value={field.value}
+                        onChange={files => field.onChange(files)}
+                        maxFiles={10}
+                        disabled={loading}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='imagesAfter'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <MultiImageUploadField
+                        name='images'
+                        label='Images After'
+                        value={field.value}
+                        onChange={files => field.onChange(files)}
+                        maxFiles={10}
+                        disabled={loading}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -206,7 +293,7 @@ export default function UpdateProject() {
 
             <CardFooter>
               <Button type='submit' className='w-full' disabled={loading}>
-                {loading ? 'Submitting...' : 'Update Information'}
+                {loading ? 'Submitting...' : 'Create'}
               </Button>
             </CardFooter>
           </form>

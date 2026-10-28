@@ -20,13 +20,13 @@ export interface IProject {
 export interface IProjectRequest {
   _id?: string
   name: string
-  donor?: string
-  value?: string
-  startDate?: string
-  endDate?: string
-  projectType: string
-  images?: File[]
   mainImage: File
+  quickOverview: string
+  summary?: string
+  organization?: string
+  imagesBefore?: File[]
+  imagesAfter?: File[]
+  projectType: string
 }
 
 export const ProjectFormSchema = z.object({
@@ -34,17 +34,23 @@ export const ProjectFormSchema = z.object({
     .string()
     .min(1, 'Name is required')
     .max(30, 'Title must be 30 characters or less'),
-  donor: z
+  //     quickOverview
+  // summary
+  quickOverview: z
     .string()
-    .max(30, 'Donor name must be 30 characters or less')
+    .min(1, 'Quick overview is required')
+    .max(200, 'Quick Overview should be less than 200 letter'),
+
+  summary: z.string().optional().or(z.literal('')),
+  organization: z
+    .string()
+    .max(30, 'Organization name must be 30 characters or less')
     .optional()
     .or(z.literal('')),
 
-  value: z.string().optional().or(z.literal('')),
-  startDate: z.string().optional().or(z.literal('')),
-  endDate: z.string().optional().or(z.literal('')),
   projectType: z.string().min(1, 'Project Type is required'),
-  images: z.array(z.instanceof(File)).optional(),
+  imagesBefore: z.array(z.instanceof(File)).optional(),
+  imagesAfter: z.array(z.instanceof(File)).optional(),
   mainImage: z.instanceof(File)
 })
 

@@ -23,8 +23,11 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
+import { useFormContext } from '@/context/form/formContext'
 import { IFilter } from '@/Model/IApi'
 import { IProject } from '@/Model/IProject'
+import { routes } from '@/routes_Apis'
+import { useNavigate } from 'react-router'
 import { useProjectTypes } from '../hooks/useProjectType'
 
 const containerVariants: Variants = {
@@ -50,6 +53,8 @@ const cardVariants: Variants = {
 }
 
 const ProjectCard = function (props: { project: IProject; index: string }) {
+  const { setProject } = useFormContext()
+  const navigate = useNavigate()
   const { project } = props
   return (
     <motion.div
@@ -102,7 +107,10 @@ const ProjectCard = function (props: { project: IProject; index: string }) {
             variant='outline'
             size='sm'
             className='group/btn w-full justify-between transition-colors hover:bg-primary hover:text-primary-foreground'
-            //   onClick={() => onProjectClick?.(project)}
+            onClick={() => {
+              setProject(project)
+              navigate(routes.show_project.concat(`/${project._id}`))
+            }}
           >
             <span>View Details</span>
             <ArrowUpRight className='h-4 w-4 transition-transform group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5' />
@@ -146,6 +154,7 @@ export default function Project() {
           <h1 className='text-2xl font-bold'>All Projects</h1>
           <Select
             onValueChange={e => {
+              setPage(1)
               setFilter({ name: 'projectType', operator: 'equal', value: e })
             }}
             defaultValue={filter?.value}

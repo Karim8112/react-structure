@@ -34,13 +34,14 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
+import { TextArea } from '@/components/ui/textArea'
 import { IProjectRequest } from '@/Model/IProject'
 import { ProjectFormSchema, ProjectFormValues } from '../../../Model/IProject'
 import { useProjectTypes } from '../hooks/useProjectType'
 
 export default function AddProject() {
   const navigate = useNavigate()
-  const ProjectTypes = useProjectTypes()
+  const ProjectTypes = useProjectTypes({})
   const [loading, setLoading] = useState<boolean>(false)
   const [snackbarmsg, setSnackbarmsg] = useState<string>('')
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
@@ -52,34 +53,48 @@ export default function AddProject() {
     resolver: zodResolver(ProjectFormSchema),
     defaultValues: {
       name: '',
-      donor: '',
-      value: '',
-      startDate: '',
-      endDate: '',
-      projectType: '',
-      images: [],
-      mainImage: undefined
+      quickOverview: '',
+      summary: '',
+      organization: '',
+      mainImage: undefined,
+      imagesBefore: [],
+      imagesAfter: [],
+      projectType: ''
     }
   })
 
   async function onSubmit(data: ProjectFormValues) {
     // Sanitize payload by removing blank string entries
 
-    const Files: File[] = []
+    const IBFiles: File[] = []
+    const IAFiles: File[] = []
 
-    if (data?.images) {
-      data.images.forEach(item => {
+    if (data?.imagesBefore) {
+      data.imagesBefore.forEach(item => {
         if (item instanceof File) {
-          Files.push(item)
+          IBFiles.push(item)
         }
       })
     }
+
+    if (data?.imagesAfter) {
+      data.imagesAfter.forEach(item => {
+        if (item instanceof File) {
+          IAFiles.push(item)
+        }
+      })
+    }
+
     const payload: IProjectRequest = {
       ...data
     }
 
-    if (Files.length > 0) {
-      payload.images = Files // objectToFormData appends each file under 'images'
+    if (IBFiles.length > 0) {
+      payload.imagesBefore = IBFiles // objectToFormData appends each file under 'images'
+    }
+
+    if (IAFiles.length > 0) {
+      payload.imagesAfter = IAFiles // objectToFormData appends each file under 'images'
     }
 
     await PostAxios<IProjectRequest, unknown>({
@@ -131,7 +146,7 @@ export default function AddProject() {
                   <FormItem>
                     <FormControl>
                       <ImageUploadField
-                        name='imageLeft'
+                        name='main project image'
                         label='Left Image (Profile / Main)'
                         value={field.value}
                         onChange={file => field.onChange(file)}
@@ -183,10 +198,10 @@ export default function AddProject() {
               {/* Address (Optional, max 100) */}
               <FormField
                 control={form.control}
-                name='donor'
+                name='organization'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Donor </FormLabel>
+                    <FormLabel>Organization </FormLabel>
                     <FormControl>
                       <Input placeholder='Unicef' maxLength={100} {...field} />
                     </FormControl>
@@ -198,12 +213,15 @@ export default function AddProject() {
               {/* Summary (Required) */}
               <FormField
                 control={form.control}
-                name='startDate'
+                name='quickOverview'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Start date</FormLabel>
+                    <FormLabel>Quick Overview</FormLabel>
                     <FormControl>
-                      <Input placeholder='2018/05/20' {...field} />
+                      <TextArea
+                        placeholder='هذا نص سريع يعرض عند استعراض كل المشاريع'
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -212,26 +230,16 @@ export default function AddProject() {
 
               <FormField
                 control={form.control}
-                name='endDate'
+                name='summary'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>End date</FormLabel>
+                    <FormLabel>Project Description</FormLabel>
                     <FormControl>
-                      <Input placeholder='2020/05/20' {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='value'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Value</FormLabel>
-                    <FormControl>
-                      <Input placeholder='300 $' {...field} />
+                      <TextArea
+                        className='h-96'
+                        placeholder='هذا وصف المشروع بالكامل'
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -241,13 +249,32 @@ export default function AddProject() {
               {/* upload images */}
               <FormField
                 control={form.control}
-                name='images'
+                name='imagesBefore'
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
                       <MultiImageUploadField
                         name='images'
-                        label='Project Image Gallery'
+                        label='Images Before'
+                        value={field.value}
+                        onChange={files => field.onChange(files)}
+                        maxFiles={10}
+                        disabled={loading}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='imagesAfter'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <MultiImageUploadField
+                        name='images'
+                        label='Images After'
                         value={field.value}
                         onChange={files => field.onChange(files)}
                         maxFiles={10}

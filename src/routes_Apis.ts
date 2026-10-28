@@ -8,6 +8,7 @@ export enum routes {
   add_project = '/project/add-project',
   update_project = '/project/update-project',
   projects = '/project',
+  show_project = '/show-project',
   add_project_type = '/project/add-project-type',
   update_project_type = '/project/update-project-type',
   project_types = '/project-types',
