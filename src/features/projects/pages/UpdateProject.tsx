@@ -1,9 +1,8 @@
-import PostAxios from '@/lib/PostAxios'
 import { APIs, routes } from '@/routes_Apis'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -35,37 +34,47 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { TextArea } from '@/components/ui/textArea'
-import { useFormContext } from '@/context/form/formContext'
+import PatchAxios from '@/lib/PatchAxios'
 import { IProjectRequest } from '@/Model/IProject'
 import { ProjectFormSchema, ProjectFormValues } from '../../../Model/IProject'
+import { useProject } from '../hooks/useProject'
 import { useProjectTypes } from '../hooks/useProjectType'
 
 export default function AddProject() {
   const navigate = useNavigate()
-  const { project } = useFormContext()
   const ProjectTypes = useProjectTypes({})
+  const projectHook = useProject()
+  const { projectId } = useParams()
   const [loading, setLoading] = useState<boolean>(false)
   const [snackbarmsg, setSnackbarmsg] = useState<string>('')
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
   const [snackbarColor, setSnackbarColor] = useState<'success' | 'danger'>(
     'success'
   )
-
   const form = useForm<ProjectFormValues>({
-    resolver: zodResolver(ProjectFormSchema),
-    defaultValues: {
-      name: project?.name,
-      quickOverview: project?.quickOverview,
-      summary: project?.summary,
-      organization: project?.organization,
-      mainImage: undefined,
-      imagesBefore: [],
-      imagesAfter: [],
-      projectType: ''
-    }
+    resolver: zodResolver(ProjectFormSchema)
   })
 
-  async function onSubmit(data: ProjectFormValues) {
+  useEffect(() => {
+    if (projectId) projectHook.getOne({ id: projectId })
+  }, [])
+
+  useEffect(() => {
+    if (!projectHook.oneProject) return
+
+    form.reset({
+      name: projectHook.oneProject?.name,
+      quickOverview: projectHook.oneProject?.quickOverview,
+      summary: projectHook.oneProject?.summary,
+      organization: projectHook.oneProject?.organization,
+      mainImage: projectHook.oneProject?.mainImage,
+      imagesBefore: projectHook.oneProject?.imagesBefore,
+      imagesAfter: projectHook.oneProject?.imagesAfter,
+      projectType: projectHook.oneProject?.projectType._id
+    })
+  }, [projectHook.oneProject, form.reset])
+
+  const onSubmit = (data: ProjectFormValues) => {
     // Sanitize payload by removing blank string entries
 
     const IBFiles: File[] = []
@@ -99,7 +108,8 @@ export default function AddProject() {
       payload.imagesAfter = IAFiles // objectToFormData appends each file under 'images'
     }
 
-    await PostAxios<IProjectRequest, unknown>({
+    PatchAxios<IProjectRequest, unknown>({
+      objectId: String(projectId),
       path: APIs.project,
       payload,
       isFormData: true,
@@ -113,7 +123,7 @@ export default function AddProject() {
     })
   }
 
-  return (
+  return !projectHook.loading ? (
     <div className='flex min-h-screen items-center justify-center p-4'>
       <Card className='w-full max-w-2xl'>
         <CardHeader>
@@ -310,5 +320,7 @@ export default function AddProject() {
         {snackbarmsg}
       </Snackbar>
     </div>
+  ) : (
+    'Loading'
   )
 }

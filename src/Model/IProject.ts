@@ -20,12 +20,12 @@ export interface IProject {
 export interface IProjectRequest {
   _id?: string
   name: string
-  mainImage: File
+  mainImage: File | string
   quickOverview: string
   summary?: string
   organization?: string
-  imagesBefore?: File[]
-  imagesAfter?: File[]
+  imagesBefore?: File[] | string[]
+  imagesAfter?: File[] | string[]
   projectType: string
 }
 
@@ -49,9 +49,13 @@ export const ProjectFormSchema = z.object({
     .or(z.literal('')),
 
   projectType: z.string().min(1, 'Project Type is required'),
-  imagesBefore: z.array(z.instanceof(File)).optional(),
-  imagesAfter: z.array(z.instanceof(File)).optional(),
-  mainImage: z.instanceof(File)
+  imagesBefore: z
+    .union([z.array(z.instanceof(File)), z.array(z.string())])
+    .optional(),
+  imagesAfter: z
+    .union([z.array(z.instanceof(File)), z.array(z.string())])
+    .optional(),
+  mainImage: z.union([z.instanceof(File), z.string()])
 })
 
 export type ProjectFormValues = z.infer<typeof ProjectFormSchema>

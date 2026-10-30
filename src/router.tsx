@@ -54,12 +54,6 @@ const privateRoutes = [
                 title: 'edit member',
                 path: `${routes.update_member}`,
                 element: <UpdateMember />
-              },
-              {
-                hide: true,
-                title: 'show project',
-                path: `${routes.show_project}/:projectId`,
-                element: <ShowProject />
               }
             ]
           },
@@ -82,11 +76,16 @@ const privateRoutes = [
                 path: routes.projects,
                 element: <Project />
               },
-
+              {
+                hide: true,
+                title: 'show project',
+                path: `${routes.show_project}/:projectId`,
+                element: <ShowProject />
+              },
               {
                 hide: true,
                 title: 'edit project',
-                path: `${routes.update_project}`,
+                path: `${routes.update_project}/:projectId`,
                 element: <UpdateProject />
               }
             ]

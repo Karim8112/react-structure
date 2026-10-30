@@ -165,6 +165,9 @@ export default function Project() {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
+                <SelectItem className='cursor-pointer' key={'All'} value={''}>
+                  {`All`}
+                </SelectItem>
                 {projectType.loading
                   ? '...Loading'
                   : projectType.data?.data.map(projectType => (

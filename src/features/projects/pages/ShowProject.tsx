@@ -11,10 +11,12 @@ import {
 import { useEffect, useState } from 'react'
 
 // Shadcn UI Imports
+import ActionHeader from '@/components/ActionHeader'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { routes } from '@/routes_Apis'
 import { useParams } from 'react-router'
 import { useProject } from '../hooks/useProject'
 
@@ -43,6 +45,7 @@ export default function ShowProject() {
   const [activeTab, setActiveTab] = useState<'all' | 'before' | 'after'>('all')
   const projectHook = useProject()
   const { projectId } = useParams()
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false)
 
   useEffect(() => {
     if (projectId) projectHook.getOne({ id: projectId })
@@ -61,6 +64,44 @@ export default function ShowProject() {
       initial='hidden'
       animate='visible'
     >
+      <ActionHeader
+        dir='end'
+        buttons={[
+          {
+            text: `Edit`,
+            type: 'edit',
+            behave: {
+              path: routes.update_project.concat(`/${projectId}`)
+            }
+          },
+
+          {
+            text: `Delete`,
+            type: 'delete',
+            behave: {
+              open: dialogOpen,
+              setOpen: setDialogOpen,
+              title: `Deleting '${projectHook.oneProject?.name}'`,
+              content: `do you want to delete ${projectHook.oneProject?.name}`,
+
+              Buttons: [
+                // { btnText: "yes, i' m sure", type: 'ok' },
+                {
+                  btnText: 'Delete this project',
+                  type: 'error',
+                  onClick() {
+                    projectHook.Delete({
+                      memberId: projectHook.oneProject?._id as string,
+                      setOpen: setDialogOpen
+                    })
+                  },
+                  loading: projectHook.deletLoading
+                }
+              ]
+            }
+          }
+        ]}
+      />
       {/* --- Top Navigation Header --- */}
       <motion.div
         variants={itemVariants}

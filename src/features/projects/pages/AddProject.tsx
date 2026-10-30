@@ -254,7 +254,7 @@ export default function AddProject() {
                   <FormItem>
                     <FormControl>
                       <MultiImageUploadField
-                        name='images'
+                        name='imagesBefore'
                         label='Images Before'
                         value={field.value}
                         onChange={files => field.onChange(files)}
@@ -273,7 +273,7 @@ export default function AddProject() {
                   <FormItem>
                     <FormControl>
                       <MultiImageUploadField
-                        name='images'
+                        name='imagesAfter'
                         label='Images After'
                         value={field.value}
                         onChange={files => field.onChange(files)}
