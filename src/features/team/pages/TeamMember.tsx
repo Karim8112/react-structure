@@ -301,8 +301,18 @@ export default function PostDetail() {
       </Snackbar>
     </>
   ) : (
-    <div className='flex h-full w-full items-center justify-center'>
-      ...Loading
-    </div>
+    <>
+      <div className='mb-10 h-14 w-full animate-pulse rounded-sm bg-slate-200 dark:bg-slate-800' />
+      <div className='mb-10 grid grid-cols-2 gap-6'>
+        {Array.from({ length: 2 }).map((_, index) => (
+          <div
+            key={index}
+            className='h-80 w-full animate-pulse rounded-sm bg-slate-200 dark:bg-slate-800'
+          />
+        ))}
+      </div>
+      <div className='mb-10 h-14 w-full animate-pulse rounded-sm bg-slate-200 dark:bg-slate-800' />
+      <div className='mb-10 h-14 w-full animate-pulse rounded-sm bg-slate-200 dark:bg-slate-800' />
+    </>
   )
 }

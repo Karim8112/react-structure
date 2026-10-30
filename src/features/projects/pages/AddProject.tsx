@@ -36,6 +36,7 @@ import {
 } from '@/components/ui/select'
 import { TextArea } from '@/components/ui/textArea'
 import { IProjectRequest } from '@/Model/IProject'
+import { ThreeDot } from 'react-loading-indicators'
 import { ProjectFormSchema, ProjectFormValues } from '../../../Model/IProject'
 import { useProjectTypes } from '../hooks/useProjectType'
 
@@ -297,7 +298,17 @@ export default function AddProject() {
 
             <CardFooter>
               <Button type='submit' className='w-full' disabled={loading}>
-                {loading ? 'Submitting...' : 'Create'}
+                {loading ? (
+                  <ThreeDot
+                    color='black'
+                    size='small'
+                    text=''
+                    textColor=''
+                    style={{ height: '15px !important' }}
+                  />
+                ) : (
+                  'Create'
+                )}
               </Button>
             </CardFooter>
           </form>

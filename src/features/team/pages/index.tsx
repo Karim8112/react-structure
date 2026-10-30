@@ -123,6 +123,7 @@ export default function Team() {
 
   const table = useReactTable({
     data: Team.data?.data || [],
+
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -223,13 +224,29 @@ export default function Team() {
                     ))}
                   </TableRow>
                 ))
-              ) : (
+              ) : !Team.loading ? (
                 <TableRow>
                   <TableCell
                     colSpan={columns.length}
                     className='h-24 text-center'
                   >
                     No results.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className='h-12 text-center'
+                  >
+                    <div className='grid grid-cols-4 gap-2'>
+                      {Array.from({ length: 4 }).map((_, index) => (
+                        <div
+                          key={index}
+                          className='h-5 w-full animate-pulse rounded-sm bg-slate-200 dark:bg-slate-800'
+                        />
+                      ))}
+                    </div>
                   </TableCell>
                 </TableRow>
               )}

@@ -24,6 +24,7 @@ import {
 import { Input } from '@/components/ui/input'
 import Snackbar from '@mui/joy/Snackbar'
 
+import { ThreeDot } from 'react-loading-indicators'
 import IVideo, { VideoFormSchema, VideoFormValues } from '../../../Model/IVideo'
 
 export default function AddVideo() {
@@ -110,7 +111,17 @@ export default function AddVideo() {
 
             <CardFooter>
               <Button type='submit' className='w-full' disabled={loading}>
-                {loading ? 'Submitting...' : 'Create'}
+                {loading ? (
+                  <ThreeDot
+                    color='black'
+                    size='small'
+                    text=''
+                    textColor=''
+                    style={{ height: '15px !important' }}
+                  />
+                ) : (
+                  'Create'
+                )}
               </Button>
             </CardFooter>
           </form>

@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
-
+import { ThreeDot } from 'react-loading-indicators'
 type DialogButtonType = 'ok' | 'cancel' | 'error'
 type ButtonOptions = {
   className?: string
@@ -109,7 +109,17 @@ const MainDialog = function ({
                         }
                   }
                 >
-                  {dBtn.loading ? <>Loading</> : <span>{dBtn.btnText}</span>}
+                  {dBtn.loading ? (
+                    <ThreeDot
+                      color='#FFFFFF'
+                      size='small'
+                      text=''
+                      textColor=''
+                      style={{ height: '15px !important' }}
+                    />
+                  ) : (
+                    <span>{dBtn.btnText}</span>
+                  )}
                 </button>
               )
             })}

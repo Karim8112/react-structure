@@ -1,4 +1,4 @@
-import { NewspaperIcon } from 'lucide-react'
+import { Construction, Gem, List, Plus, Users, Video } from 'lucide-react'
 import { Navigate, useRoutes } from 'react-router'
 import Login from './features/authentication/login'
 import AddMember from './features/team/pages/AddMember'
@@ -12,13 +12,12 @@ import Project from './features/projects/pages/index2'
 import ProjectTypes from './features/projects/pages/ProjectTypes'
 import UpdateProject from './features/projects/pages/UpdateProject'
 
-import Layout from './layout'
-import { NavGroup } from './layout/types'
-
 import ShowProject from './features/projects/pages/ShowProject'
-import Video from './features/videos/pages'
+import VideoPage from './features/videos/pages'
 import AddVideo from './features/videos/pages/AddVideo'
 import UpdateVideo from './features/videos/pages/UpdateVideo'
+import Layout from './layout'
+import { NavGroup } from './layout/types'
 import { routes } from './routes_Apis'
 
 const privateRoutes = [
@@ -31,14 +30,16 @@ const privateRoutes = [
         children: [
           {
             title: 'Team Members',
-            icon: NewspaperIcon,
+            icon: Users,
             children: [
               {
+                icon: Plus,
                 title: 'Add new member',
                 path: routes.add_member,
                 element: <AddMember />
               },
               {
+                icon: List,
                 title: 'All members',
                 path: routes.main,
                 element: <Team />
@@ -59,19 +60,22 @@ const privateRoutes = [
           },
           {
             title: 'Projects',
-            icon: NewspaperIcon,
+            icon: Construction,
             children: [
               {
+                icon: Gem,
                 title: 'Project Types',
                 path: routes.project_types,
                 element: <ProjectTypes />
               },
               {
+                icon: Plus,
                 title: 'Add new Project',
                 path: routes.add_project,
                 element: <AddProject />
               },
               {
+                icon: List,
                 title: 'All Projects',
                 path: routes.projects,
                 element: <Project />
@@ -92,17 +96,19 @@ const privateRoutes = [
           },
           {
             title: 'Videos',
-            icon: NewspaperIcon,
+            icon: Video,
             children: [
               {
+                icon: Plus,
                 title: 'Add new Video',
                 path: routes.add_video,
                 element: <AddVideo />
               },
               {
+                icon: List,
                 title: 'All Videos',
                 path: routes.videos,
-                element: <Video />
+                element: <VideoPage />
               },
 
               {

@@ -41,7 +41,14 @@ export default function Video() {
       {' '}
       <div className='w-full'>
         {Videos.loading ? (
-          'Loading ...'
+          <div className='grid grid-cols-1 gap-6 p-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+            {Array.from({ length: 8 }).map((_, index) => (
+              <div
+                key={index}
+                className='h-48 w-full animate-pulse rounded-xl bg-slate-200 dark:bg-slate-800'
+              />
+            ))}
+          </div>
         ) : (
           <div className='grid w-full grid-cols-1 gap-5 px-4 sm:grid-cols-2 lg:grid-cols-4'>
             {filteredData?.map(video => {

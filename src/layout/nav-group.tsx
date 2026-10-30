@@ -106,7 +106,7 @@ const SidebarMenuCollapsible = ({
       <SidebarMenuItem>
         <CollapsibleTrigger asChild>
           <SidebarMenuButton tooltip={item.title}>
-            {item.icon && <item.icon />}
+            {item.icon && <item.icon color='#D1B797' />}
             <span>{item.title}</span>
             {item.badge && <NavBadge>{item.badge}</NavBadge>}
             <ChevronRight className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90' />
@@ -121,7 +121,7 @@ const SidebarMenuCollapsible = ({
                   isActive={checkIsActive(href, subItem)}
                 >
                   <Link to={subItem.path} onClick={() => setOpenMobile(false)}>
-                    {subItem.icon && <subItem.icon />}
+                    {subItem.icon && <subItem.icon color='gray' />}
                     <span>{subItem.title}</span>
                     {subItem.badge && <NavBadge>{subItem.badge}</NavBadge>}
                   </Link>

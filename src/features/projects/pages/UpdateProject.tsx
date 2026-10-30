@@ -36,6 +36,7 @@ import {
 import { TextArea } from '@/components/ui/textArea'
 import PatchAxios from '@/lib/PatchAxios'
 import { IProjectRequest } from '@/Model/IProject'
+import { ThreeDot } from 'react-loading-indicators'
 import { ProjectFormSchema, ProjectFormValues } from '../../../Model/IProject'
 import { useProject } from '../hooks/useProject'
 import { useProjectTypes } from '../hooks/useProjectType'
@@ -305,7 +306,17 @@ export default function AddProject() {
 
             <CardFooter>
               <Button type='submit' className='w-full' disabled={loading}>
-                {loading ? 'Submitting...' : 'Save Changes'}
+                {loading ? (
+                  <ThreeDot
+                    color='black'
+                    size='small'
+                    text=''
+                    textColor=''
+                    style={{ height: '15px !important' }}
+                  />
+                ) : (
+                  'Save Changes'
+                )}
               </Button>
             </CardFooter>
           </form>
@@ -323,6 +334,15 @@ export default function AddProject() {
       </Snackbar>
     </div>
   ) : (
-    'Loading'
+    <>
+      <div className='mt-10 flex items-center justify-center gap-6'>
+        {Array.from({ length: 1 }).map((_, index) => (
+          <div
+            key={index}
+            className='h-screen w-1/2 animate-pulse rounded-lg bg-slate-200 dark:bg-slate-800'
+          />
+        ))}
+      </div>
+    </>
   )
 }

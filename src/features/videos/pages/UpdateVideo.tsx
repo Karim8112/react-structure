@@ -26,6 +26,7 @@ import Snackbar from '@mui/joy/Snackbar'
 import { useFormContext } from '@/context/form/formContext'
 import PatchAxios from '@/lib/PatchAxios'
 import IVideo, { VideoFormSchema, VideoFormValues } from '@/Model/IVideo'
+import { ThreeDot } from 'react-loading-indicators'
 
 export default function UpdateVideo() {
   const { video } = useFormContext()
@@ -113,7 +114,17 @@ export default function UpdateVideo() {
 
             <CardFooter>
               <Button type='submit' className='w-full' disabled={loading}>
-                {loading ? 'Submitting...' : 'Save'}
+                {loading ? (
+                  <ThreeDot
+                    color='black'
+                    size='small'
+                    text=''
+                    textColor=''
+                    style={{ height: '15px !important' }}
+                  />
+                ) : (
+                  'Save'
+                )}
               </Button>
             </CardFooter>
           </form>
