@@ -24,8 +24,8 @@ export interface IProjectRequest {
   quickOverview: string
   summary?: string
   organization?: string
-  imagesBefore?: File[] | string[]
-  imagesAfter?: File[] | string[]
+  imagesBefore?: (string | File)[]
+  imagesAfter?: (string | File)[]
   projectType: string
 }
 
@@ -49,12 +49,8 @@ export const ProjectFormSchema = z.object({
     .or(z.literal('')),
 
   projectType: z.string().min(1, 'Project Type is required'),
-  imagesBefore: z
-    .union([z.array(z.instanceof(File)), z.array(z.string())])
-    .optional(),
-  imagesAfter: z
-    .union([z.array(z.instanceof(File)), z.array(z.string())])
-    .optional(),
+  imagesBefore: z.array(z.union([z.instanceof(File), z.string()])).optional(),
+  imagesAfter: z.array(z.union([z.instanceof(File), z.string()])).optional(),
   mainImage: z.union([z.instanceof(File), z.string()])
 })
 

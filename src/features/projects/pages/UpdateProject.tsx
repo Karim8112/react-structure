@@ -77,22 +77,18 @@ export default function AddProject() {
   const onSubmit = (data: ProjectFormValues) => {
     // Sanitize payload by removing blank string entries
 
-    const IBFiles: File[] = []
-    const IAFiles: File[] = []
+    const IBFiles: (File | string)[] = []
+    const IAFiles: (File | string)[] = []
 
     if (data?.imagesBefore) {
       data.imagesBefore.forEach(item => {
-        if (item instanceof File) {
-          IBFiles.push(item)
-        }
+        IBFiles.push(item)
       })
     }
 
     if (data?.imagesAfter) {
       data.imagesAfter.forEach(item => {
-        if (item instanceof File) {
-          IAFiles.push(item)
-        }
+        IAFiles.push(item)
       })
     }
 
@@ -127,7 +123,7 @@ export default function AddProject() {
     <div className='flex min-h-screen items-center justify-center p-4'>
       <Card className='w-full max-w-2xl'>
         <CardHeader>
-          <CardTitle>Create New Project</CardTitle>
+          <CardTitle>Update Project</CardTitle>
         </CardHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
@@ -303,7 +299,7 @@ export default function AddProject() {
 
             <CardFooter>
               <Button type='submit' className='w-full' disabled={loading}>
-                {loading ? 'Submitting...' : 'Create'}
+                {loading ? 'Submitting...' : 'Save Changes'}
               </Button>
             </CardFooter>
           </form>

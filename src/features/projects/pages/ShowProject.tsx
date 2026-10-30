@@ -59,7 +59,7 @@ export default function ShowProject() {
 
   return !projectHook.loading ? (
     <motion.div
-      className='mx-auto min-h-screen max-w-7xl space-y-8 bg-background p-4 text-foreground sm:p-6 lg:p-10'
+      className='mx-auto min-h-screen max-w-7xl space-y-8 bg-background px-4 text-foreground sm:px-6 lg:px-10'
       variants={containerVariants}
       initial='hidden'
       animate='visible'
