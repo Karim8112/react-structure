@@ -120,6 +120,27 @@ export default function AddProject() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
             <CardContent className='space-y-4'>
+              <FormField
+                control={form.control}
+                name='mainImage'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <ImageUploadField
+                        isRequired={true}
+                        width={400}
+                        name='main project image'
+                        label='Project Image'
+                        value={field.value}
+                        onChange={file => field.onChange(file)}
+                        disabled={loading}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               {/* Title (Required, max 20) */}
               <FormField
                 control={form.control}
@@ -132,25 +153,6 @@ export default function AddProject() {
                         placeholder='Project name'
                         maxLength={30}
                         {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='mainImage'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <ImageUploadField
-                        name='main project image'
-                        label='Left Image (Profile / Main)'
-                        value={field.value}
-                        onChange={file => field.onChange(file)}
-                        disabled={loading}
                       />
                     </FormControl>
                     <FormMessage />
@@ -210,6 +212,50 @@ export default function AddProject() {
                 )}
               />
 
+              {/* upload images */}
+              <FormField
+                control={form.control}
+                name='imagesBefore'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <MultiImageUploadField
+                        width={220}
+                        height={160}
+                        name='imagesBefore'
+                        label='Images Before'
+                        value={field.value}
+                        onChange={files => field.onChange(files)}
+                        maxFiles={10}
+                        disabled={loading}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='imagesAfter'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <MultiImageUploadField
+                        width={220}
+                        height={160}
+                        name='imagesAfter'
+                        label='Images After'
+                        value={field.value}
+                        onChange={files => field.onChange(files)}
+                        maxFiles={10}
+                        disabled={loading}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               {/* Summary (Required) */}
               <FormField
                 control={form.control}
@@ -239,46 +285,6 @@ export default function AddProject() {
                         className='h-96'
                         placeholder='هذا وصف المشروع بالكامل'
                         {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* upload images */}
-              <FormField
-                control={form.control}
-                name='imagesBefore'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <MultiImageUploadField
-                        name='imagesBefore'
-                        label='Images Before'
-                        value={field.value}
-                        onChange={files => field.onChange(files)}
-                        maxFiles={10}
-                        disabled={loading}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name='imagesAfter'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <MultiImageUploadField
-                        name='imagesAfter'
-                        label='Images After'
-                        value={field.value}
-                        onChange={files => field.onChange(files)}
-                        maxFiles={10}
-                        disabled={loading}
                       />
                     </FormControl>
                     <FormMessage />

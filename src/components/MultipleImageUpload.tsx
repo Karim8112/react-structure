@@ -13,6 +13,9 @@ export interface MultiImageUploadFieldProps {
   maxFiles?: number
   /** Disable controls during loading/submitting */
   disabled?: boolean
+  width?: number
+  height?: number
+  isRequired?: number
 }
 
 interface ImageItem {
@@ -28,7 +31,10 @@ export const MultiImageUploadField: React.FC<MultiImageUploadFieldProps> = ({
   value = [],
   onChange,
   maxFiles = 10,
-  disabled = false
+  disabled = false,
+  width = 160,
+  height = 220,
+  isRequired = false
 }) => {
   const [items, setItems] = useState<ImageItem[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -95,9 +101,11 @@ export const MultiImageUploadField: React.FC<MultiImageUploadFieldProps> = ({
   }
 
   return (
-    <div className='flex flex-col gap-3'>
+    <div className='flex flex-col gap-3 pb-8 pt-4'>
       <div className='flex items-center justify-between'>
-        <label className='text-sm font-medium text-slate-700'>{label}</label>
+        <label className='text-sm font-bold text-black dark:text-white'>
+          {label} {isRequired ? '*' : ''}
+        </label>
         <span className='font-mono text-xs text-slate-400'>
           ({items.length}/{maxFiles} photos)
         </span>
@@ -122,8 +130,8 @@ export const MultiImageUploadField: React.FC<MultiImageUploadFieldProps> = ({
           <div
             key={item.id}
             style={{
-              width: '160px',
-              height: '220px',
+              width: `${width}px`,
+              height: `${height}px`,
               borderRadius: '12px' // Strict 12px border radius
             }}
             className='relative flex select-none flex-col items-center justify-center overflow-hidden border-2 border-slate-200 bg-slate-50 shadow-sm transition-all hover:border-slate-300'
@@ -164,8 +172,8 @@ export const MultiImageUploadField: React.FC<MultiImageUploadFieldProps> = ({
           <div
             onClick={handleUploadBoxClick}
             style={{
-              width: '160px',
-              height: '220px',
+              width: `${width}px`,
+              height: `${height}px`,
               borderRadius: '12px'
             }}
             className={`flex cursor-pointer select-none flex-col items-center justify-center border-2 border-dashed transition-all ${

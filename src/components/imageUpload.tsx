@@ -13,6 +13,9 @@ export interface ImageUploadFieldProps {
   onChange: (file: File | null) => void
   /** Optional disabled state (e.g., while submitting) */
   disabled?: boolean
+  width?: number
+  height?: number
+  isRequired?: boolean
 }
 
 export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
@@ -21,7 +24,10 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
   currentImageUrl,
   value,
   onChange,
-  disabled = false
+  disabled = false,
+  width = 190,
+  height = 260,
+  isRequired = false
 }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(
     value instanceof File ? value : null
@@ -77,9 +83,11 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
     previewUrl || (typeof value === 'string' && value ? value : currentImageUrl)
 
   return (
-    <div className='flex flex-col gap-2'>
-      <div className='flex items-center justify-between'>
-        <label className='text-sm font-medium text-slate-700'>{label}</label>
+    <div className='flex flex-col items-center gap-8 pb-8 pt-4'>
+      <div className='flex w-full flex-col justify-between'>
+        <label className='text-sm font-bold text-black dark:text-white'>
+          {label} {isRequired ? '*' : ''}
+        </label>
         <span className='font-mono text-xs text-slate-400'>({name})</span>
       </div>
 
@@ -98,8 +106,8 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
       <div
         onClick={handleBoxClick}
         style={{
-          width: '190px',
-          height: '260px',
+          width: `${width}px`,
+          height: `${height}px`,
           borderRadius: '12px' // STRICT constraint: maximum 12px, not rounded-full
         }}
         className={`relative flex cursor-pointer select-none flex-col items-center justify-center overflow-hidden border-2 border-dashed transition-all ${
