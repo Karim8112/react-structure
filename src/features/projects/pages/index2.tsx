@@ -23,7 +23,6 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
-import { useFormContext } from '@/context/form/formContext'
 import { IFilter } from '@/Model/IApi'
 import { IProject } from '@/Model/IProject'
 import { routes } from '@/routes_Apis'
@@ -53,7 +52,6 @@ const cardVariants: Variants = {
 }
 
 const ProjectCard = function (props: { project: IProject; index: string }) {
-  const { setProject } = useFormContext()
   const navigate = useNavigate()
   const { project } = props
   return (
@@ -108,7 +106,6 @@ const ProjectCard = function (props: { project: IProject; index: string }) {
             size='sm'
             className='group/btn w-full justify-between transition-colors hover:bg-primary hover:text-primary-foreground'
             onClick={() => {
-              setProject(project)
               navigate(routes.show_project.concat(`/${project._id}`))
             }}
           >
