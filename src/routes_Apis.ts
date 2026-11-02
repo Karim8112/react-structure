@@ -14,7 +14,14 @@ export enum routes {
   project_types = '/project-types',
   add_video = '/video/add-video',
   update_video = '/video/update-video',
-  videos = '/video'
+  videos = '/video',
+  //
+  hero = '/hero',
+  what_we_do = '/what-we-do',
+  additional_section = '/additional-section',
+  about_us = '/about-us',
+  list = '/list',
+  contact_info = '/contact-info'
 }
 
 export enum APIs {
@@ -22,5 +29,12 @@ export enum APIs {
   team = '/team',
   project = '/project',
   project_type = '/project_type',
-  video = '/video'
+  video = '/video',
+  //
+  hero = '/hero',
+  what_we_do = '/what-we-do',
+  additional_section = '/additional-section',
+  about_us = '/about-us',
+  list = '/list',
+  contact_info = '/contact-info'
 }

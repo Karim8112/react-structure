@@ -94,13 +94,7 @@ const ActionHeader = function ({
                     className: buttonClass.className,
                     Icon: buttonClass.Icon
                   }}
-                  dialogOptions={{
-                    open: btn.behave.open,
-                    setOpen: btn.behave.setOpen,
-                    content: btn.behave.content,
-                    title: btn.behave.title,
-                    Buttons: btn.behave.Buttons
-                  }}
+                  dialogOptions={btn.behave}
                 />
               </>
             )

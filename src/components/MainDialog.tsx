@@ -20,6 +20,7 @@ export type DialogOptions = {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   content?: string
+  max_width?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'
   Element?: React.ReactNode
   title: string
   key?: string
@@ -80,13 +81,19 @@ const MainDialog = function ({
           <span>{btnOptions.text}</span>
         </button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent
+        className={
+          dialogOptions.max_width
+            ? `max-w-${dialogOptions.max_width}`
+            : 'max-w-lg'
+        }
+      >
         <DialogHeader>
           <DialogTitle>{dialogOptions.title}</DialogTitle>
           <DialogDescription>
             {dialogOptions.content}
             <div className='mb-2'></div>
-            {dialogOptions.Element}
+            {dialogOptions.Element ? dialogOptions.Element : ''}
           </DialogDescription>
         </DialogHeader>
         {dialogOptions.Buttons && (

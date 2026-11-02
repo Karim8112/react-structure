@@ -1,4 +1,17 @@
-import { Construction, Gem, List, Plus, Users, Video } from 'lucide-react'
+import {
+  Construction,
+  Gem,
+  Info,
+  LayoutTemplate,
+  List,
+  PhoneCall,
+  Plus,
+  Presentation,
+  Star,
+  UserRoundCog,
+  Users,
+  Video
+} from 'lucide-react'
 import { Navigate, useRoutes } from 'react-router'
 import Login from './features/authentication/login'
 import AddMember from './features/team/pages/AddMember'
@@ -12,6 +25,9 @@ import Project from './features/projects/pages/index2'
 import ProjectTypes from './features/projects/pages/ProjectTypes'
 import UpdateProject from './features/projects/pages/UpdateProject'
 
+import AdditionalSection from './features/landing/additionalSection'
+import Hero from './features/landing/hero'
+import WhatWeDo from './features/landing/whatWeDo'
 import ShowProject from './features/projects/pages/ShowProject'
 import VideoPage from './features/videos/pages'
 import AddVideo from './features/videos/pages/AddVideo'
@@ -116,6 +132,48 @@ const privateRoutes = [
                 title: 'edit project',
                 path: `${routes.update_video}`,
                 element: <UpdateVideo />
+              }
+            ]
+          },
+          {
+            title: 'Landing Page',
+            icon: Star,
+            children: [
+              {
+                icon: Presentation,
+                title: 'Main Image',
+                path: routes.hero,
+                element: <Hero />
+              },
+              {
+                icon: UserRoundCog,
+                title: 'What we do',
+                path: routes.what_we_do,
+                element: <WhatWeDo />
+              },
+              {
+                icon: LayoutTemplate,
+                title: 'Additional Sections',
+                path: routes.additional_section,
+                element: <AdditionalSection />
+              },
+              {
+                icon: Info,
+                title: 'About Us',
+                path: routes.about_us,
+                element: <VideoPage />
+              },
+              {
+                icon: List,
+                title: 'List',
+                path: routes.list,
+                element: <VideoPage />
+              },
+              {
+                icon: PhoneCall,
+                title: 'Contact Info',
+                path: routes.contact_info,
+                element: <VideoPage />
               }
             ]
           }

@@ -88,7 +88,9 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
         <label className='text-sm font-bold text-black dark:text-white'>
           {label} {isRequired ? '*' : ''}
         </label>
-        <span className='font-mono text-xs text-slate-400'>({name})</span>
+        <span className='font-mono text-xs text-slate-400'>
+          {name ? `(${name})` : ''}
+        </span>
       </div>
 
       {/* Hidden file input */}
