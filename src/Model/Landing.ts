@@ -73,6 +73,41 @@ export interface IAboutUs {
   images?: string[]
 }
 
+export interface IAboutUsRequest {
+  _id?: string
+  title1: string
+  description: string
+  title2: string
+  description2: string
+  title3: string
+  description3: string
+  images?: (string | File)[]
+}
+
+export const AboutUschema = z.object({
+  title1: z
+    .string()
+    .min(1, 'Title 1 is required')
+    .max(60, 'Title must be 60 characters or less'),
+  title2: z
+    .string()
+    .min(1, 'Title 2 is required')
+    .max(60, 'Title must be 60 characters or less'),
+  title3: z
+    .string()
+    .min(1, 'Title 3 is required')
+    .max(60, 'Title must be 60 characters or less'),
+  description: z.string().min(1, 'description 1 is required'),
+  description2: z.string().min(1, 'description 1 is required'),
+  description3: z.string().min(1, 'description 1 is required'),
+
+  images: z.array(z.union([z.instanceof(File), z.string()])).optional()
+})
+
+export type AboutUsValues = z.infer<typeof AboutUschema>
+
+// =============================================================================
+
 export interface IList {
   _id?: string
   image: string

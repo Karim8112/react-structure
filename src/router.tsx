@@ -25,6 +25,8 @@ import Project from './features/projects/pages/index2'
 import ProjectTypes from './features/projects/pages/ProjectTypes'
 import UpdateProject from './features/projects/pages/UpdateProject'
 
+import AboutUs from './features/landing/aboutUs'
+import UpdateAboutUs from './features/landing/aboutUs/updateAboutUs'
 import AdditionalSection from './features/landing/additionalSection'
 import Hero from './features/landing/hero'
 import WhatWeDo from './features/landing/whatWeDo'
@@ -161,7 +163,13 @@ const privateRoutes = [
                 icon: Info,
                 title: 'About Us',
                 path: routes.about_us,
-                element: <VideoPage />
+                element: <AboutUs />
+              },
+              {
+                hide: true,
+                title: 'Edit About Us',
+                path: routes.edit_about_us,
+                element: <UpdateAboutUs />
               },
               {
                 icon: List,

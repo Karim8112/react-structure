@@ -20,6 +20,7 @@ export enum routes {
   what_we_do = '/what-we-do',
   additional_section = '/additional-section',
   about_us = '/about-us',
+  edit_about_us = '/edit-about-us',
   list = '/list',
   contact_info = '/contact-info'
 }

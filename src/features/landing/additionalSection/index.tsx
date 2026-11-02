@@ -31,7 +31,7 @@ export default function AdditioalSection() {
         </>
       ) : (
         <>
-          <div className='col-span-2 flex w-full items-center justify-start'>
+          <div className='flex w-full items-center justify-start'>
             <MainDialog
               btnOptions={{
                 text: `Add new `,
@@ -54,86 +54,86 @@ export default function AdditioalSection() {
             />
           </div>
           {AdditioalSection.data?.data.map(item => (
-            <div
-              className='relative flex h-[50vh] w-full items-start justify-center rounded-xl'
-              style={{
-                backgroundImage: `url(${item.image})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center'
-              }}
-            >
-              <div className='flex w-full items-center justify-end p-4'>
-                <div className='flex shrink-0 items-center justify-center gap-2'>
-                  {/* Delete Dialog */}
-                  <MainDialog
-                    btnOptions={{
-                      text: ``,
-                      className: `flex items-center!  rounded-md bg-red-300 px-1 py-1 font-medium text-red-800`,
-                      Icon: <Trash key={`delete`} size={20} />,
-                      key: `${item._id}`
-                    }}
-                    dialogOptions={{
-                      key: `${item._id}`,
-                      open: DeleteDialogOpen === item._id,
-                      setOpen: open =>
-                        setDeleteDialogOpen(open ? (item._id as string) : null),
+            <div className='flex h-[70vh] gap-10 rounded-lg border p-4'>
+              <div
+                className='relative flex h-full w-[40%] items-start justify-center rounded-xl'
+                style={{
+                  backgroundImage: `url(${item.image})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
+              ></div>
 
-                      content: `Are you sure you want to delete this item?`,
-                      title: `Delete '${item.text}'`,
-                      Buttons: [
-                        {
-                          btnText: `Delete`,
-                          type: 'error',
-                          onClick() {
-                            AdditioalSection.Delete({
-                              id: item._id as string,
-                              setOpen: setDeleteDialogOpen
-                            })
-                          },
-                          loading: AdditioalSection.actionLoading
-                        }
-                      ]
-                    }}
-                  />
+              {/* the title-text */}
+              <div className='flex w-full flex-col gap-9 pt-4'>
+                <div className='flex w-full items-center justify-between'>
+                  <h3 className='text-4xl font-bold text-[#D1B797]'>
+                    {item.title}
+                  </h3>
+                  <div className='flex shrink-0 items-center justify-center gap-2'>
+                    {/* Delete Dialog */}
+                    <MainDialog
+                      btnOptions={{
+                        text: ``,
+                        className: `flex items-center!  rounded-md bg-red-200 px-1 py-1 font-medium text-red-800`,
+                        Icon: <Trash key={`delete`} size={20} />,
+                        key: `${item._id}`
+                      }}
+                      dialogOptions={{
+                        key: `${item._id}`,
+                        open: DeleteDialogOpen === item._id,
+                        setOpen: open =>
+                          setDeleteDialogOpen(
+                            open ? (item._id as string) : null
+                          ),
 
-                  {/* Edit Dialog */}
-                  <MainDialog
-                    btnOptions={{
-                      text: ``,
-                      className: `flex items-center  rounded-md bg-blue-300 px-2 py-1 font-medium text-blue-800`,
-                      Icon: <Edit key={`edit`} size={20} />,
-                      key: `${item._id}`
-                    }}
-                    dialogOptions={{
-                      max_width: '3xl',
-                      key: `${item._id}`,
-                      open: EditDialogOpen === item._id,
-                      setOpen: open =>
-                        setEditDialogOpen(open ? (item._id as string) : null),
-                      Element: (
-                        <Dialog
-                          data={item}
-                          loading={AdditioalSection.actionLoading}
-                          setOpen={setEditDialogOpen}
-                          onSubmit={AdditioalSection.PatchData}
-                        />
-                      ),
-                      title: `Edit '${item.title}'`
-                    }}
-                  />
+                        content: `Are you sure you want to delete this item?`,
+                        title: `Delete '${item.text}'`,
+                        Buttons: [
+                          {
+                            btnText: `Delete`,
+                            type: 'error',
+                            onClick() {
+                              AdditioalSection.Delete({
+                                id: item._id as string,
+                                setOpen: setDeleteDialogOpen
+                              })
+                            },
+                            loading: AdditioalSection.actionLoading
+                          }
+                        ]
+                      }}
+                    />
+
+                    {/* Edit Dialog */}
+                    <MainDialog
+                      btnOptions={{
+                        text: ``,
+                        className: `flex items-center  rounded-md bg-blue-200 px-2 py-1 font-medium text-blue-800`,
+                        Icon: <Edit key={`edit`} size={20} />,
+                        key: `${item._id}`
+                      }}
+                      dialogOptions={{
+                        max_width: '3xl',
+                        key: `${item._id}`,
+                        open: EditDialogOpen === item._id,
+                        setOpen: open =>
+                          setEditDialogOpen(open ? (item._id as string) : null),
+                        Element: (
+                          <Dialog
+                            data={item}
+                            loading={AdditioalSection.actionLoading}
+                            setOpen={setEditDialogOpen}
+                            onSubmit={AdditioalSection.PatchData}
+                          />
+                        ),
+                        title: `Edit '${item.title}'`
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              {/* overlay */}
-              <div className='bg-radial-vignette pointer-events-none absolute inset-0 z-10 bg-[#0b0b0b57]' />
-              {/*  */}
-              <div className='max-w-[800px] text-center text-white'>
-                <h3
-                  style={{ fontFamily: 'sans-serif' }}
-                  className='pointer-events-none absolute left-[10%] top-[50%] z-20 w-[85%] -translate-y-[50%] text-start text-2xl font-medium leading-[1.1] tracking-tighter md:w-[80%] md:text-[3.5rem]'
-                >
-                  {item.text}
-                </h3>
+                <p className='text-xl leading-relaxed'>{item.text}</p>
               </div>
             </div>
           ))}
