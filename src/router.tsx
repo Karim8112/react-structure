@@ -28,7 +28,9 @@ import UpdateProject from './features/projects/pages/UpdateProject'
 import AboutUs from './features/landing/aboutUs'
 import UpdateAboutUs from './features/landing/aboutUs/updateAboutUs'
 import AdditionalSection from './features/landing/additionalSection'
+import ContactInfo from './features/landing/contactInfo'
 import Hero from './features/landing/hero'
+import ListPage from './features/landing/list'
 import WhatWeDo from './features/landing/whatWeDo'
 import ShowProject from './features/projects/pages/ShowProject'
 import VideoPage from './features/videos/pages'
@@ -175,13 +177,13 @@ const privateRoutes = [
                 icon: List,
                 title: 'List',
                 path: routes.list,
-                element: <VideoPage />
+                element: <ListPage />
               },
               {
                 icon: PhoneCall,
                 title: 'Contact Info',
                 path: routes.contact_info,
-                element: <VideoPage />
+                element: <ContactInfo />
               }
             ]
           }

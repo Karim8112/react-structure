@@ -115,9 +115,30 @@ export interface IList {
   desc: string[]
 }
 
+export const Listchema = z.object({
+  title: z
+    .string()
+    .min(1, 'Title is required')
+    .max(60, 'Title must be 60 characters or less'),
+  desc: z.array(z.string()),
+  image: z.union([z.instanceof(File), z.string()])
+})
+
+export type ListValues = z.infer<typeof Listchema>
+
+// ==================================================
+
 export interface IContactInfo {
   _id?: string
   numbers: string[]
   emails: string[]
   address: string[]
 }
+
+export const ContactInfoSchema = z.object({
+  numbers: z.array(z.string()).min(1),
+  emails: z.array(z.string()).min(1),
+  address: z.array(z.string()).min(1)
+})
+
+export type ContactInfoValues = z.infer<typeof ContactInfoSchema>
