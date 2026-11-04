@@ -39,6 +39,7 @@ export default function AdditioalSection() {
                 Icon: <Plus key={`edit`} size={20} />
               }}
               dialogOptions={{
+                max_width: '3xl',
                 open: Boolean(postOpen),
                 setOpen: setPostOpen,
                 Element: (
