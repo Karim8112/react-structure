@@ -1,0 +1,116 @@
+import { type HouseType } from '@/Model/IEstate'
+import Snackbar from '@mui/joy/Snackbar'
+
+import MainDialog from '@/components/MainDialog'
+import { Input } from '@/components/ui/input'
+import { Plus } from 'lucide-react'
+import React, { useState } from 'react'
+import { useDeleteType } from '../hooks/useDeleteType'
+import { useHouseTypes } from '../hooks/useHouseType'
+import TypeCard from './TypeCard'
+
+const HouseTypes = function () {
+  const [addedType, setAddedType] = useState<string>('')
+  const [open, setOpen] = useState<boolean>(false)
+  const HouseType = useHouseTypes({ setOpen })
+  //
+  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState<string | null>(
+    null
+  )
+  const [editDialogOpen, setEditDialogOpen] = React.useState<string | null>(
+    null
+  )
+  const [hiddenRow, setHiddenRows] = React.useState<string[]>([])
+
+  const DeleteHook = useDeleteType({
+    setHiddenRows: setHiddenRows,
+    setOpen: setDeleteDialogOpen
+  })
+
+  const filteredData = React.useMemo(() => {
+    const rawData = HouseType.data?.data || []
+    return rawData.filter((item: HouseType) => !hiddenRow.includes(item._id))
+  }, [HouseType.data?.data, hiddenRow])
+  //
+  return (
+    <div>
+      <h1 className='mb-4'>Project Types</h1>
+
+      <MainDialog
+        btnOptions={{
+          text: `Add new Type`,
+          className: `flex items-center mb-5  rounded-md bg-green-200/70 px-2 py-1 font-medium text-green-800`,
+          Icon: <Plus key={`edit`} size={20} />
+        }}
+        dialogOptions={{
+          open: open,
+          setOpen: setOpen,
+          content: `what the name you want to call it now?`,
+          Element: (
+            <Input
+              content='test'
+              type='text'
+              value={addedType}
+              onChange={e => {
+                setAddedType(e.target.value)
+              }}
+            />
+          ),
+          title: `Add new house type`,
+          Buttons: [
+            // { btnText: "yes, i' m sure", type: 'ok' },
+            {
+              btnText: `Save`,
+              type: 'ok',
+              onClick() {
+                HouseType.Post(addedType)
+              },
+              loading: HouseType.loading
+            }
+          ]
+        }}
+      />
+
+      {HouseType.loading ? (
+        <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+          {Array.from({ length: 8 }).map((_, index) => (
+            <div
+              key={index}
+              className='h-12 w-full animate-pulse rounded-xl bg-slate-200 dark:bg-slate-800'
+            />
+          ))}
+        </div>
+      ) : (
+        <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4'>
+          {filteredData.map(type => {
+            const deleteOpen = deleteDialogOpen == type._id
+            const editOpen = editDialogOpen == type._id
+            return (
+              <TypeCard
+                key={type._id}
+                DeleteAxios={DeleteHook.Delete}
+                loading={DeleteHook.loading}
+                houseType={type}
+                deleteIsOpen={deleteOpen}
+                editIsOpen={editOpen}
+                setEditDialogOpen={setEditDialogOpen}
+                setDeleteDialogOpen={setDeleteDialogOpen}
+                Refresh={HouseType.Refresh}
+              />
+            )
+          })}
+        </div>
+      )}
+      <Snackbar
+        variant='outlined'
+        color={DeleteHook.snackbarColor}
+        autoHideDuration={4000}
+        open={DeleteHook.snackbarOpen}
+      >
+        {DeleteHook.snackbarmsg}
+      </Snackbar>
+    </div>
+  )
+}
+
+export default HouseTypes

@@ -133,7 +133,55 @@ export default function Project() {
 
   if ((!Project.data || Project.data.data.length === 0) && !Project.loading) {
     return (
-      <div className='flex min-h-[300px] flex-col items-center justify-center rounded-xl border border-dashed p-8 text-center'>
+      <div className='flex min-h-[300px] flex-col items-center rounded-xl py-4 text-center'>
+        <div className='flex w-full items-center justify-between'>
+          <div className='mb-4 ms-2 flex flex-col items-start justify-start gap-4'>
+            <h1 className='text-2xl font-bold'>All Projects</h1>
+            <Select
+              onValueChange={e => {
+                setPage(1)
+                setFilter({ name: 'projectType', operator: 'equal', value: e })
+              }}
+              defaultValue={filter?.value}
+              value={filter?.value}
+            >
+              <SelectTrigger className='w-64 cursor-pointer'>
+                <SelectValue placeholder='select project type'></SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem className='cursor-pointer' key={'All'} value={''}>
+                    {`All`}
+                  </SelectItem>
+                  {projectType.loading
+                    ? '...Loading'
+                    : projectType.data?.data.map(projectType => (
+                        <SelectItem
+                          className='cursor-pointer'
+                          key={projectType._id}
+                          value={projectType._id}
+                        >
+                          {projectType.name}
+                        </SelectItem>
+                      ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <span>
+              total:{' '}
+              <span className='font-bold'>
+                {!Project.loading ? Project?.data?.total : ''}
+              </span>
+            </span>
+          </div>
+
+          <PaginationComponent
+            loading={Project.loading}
+            page={page}
+            setPage={setPage}
+            total={Project?.data?.total as number}
+          />
+        </div>
         <ImageIcon className='mb-3 h-10 w-10 text-muted-foreground' />
         <h3 className='text-lg font-semibold'>No Projects Found</h3>
         <p className='text-sm text-muted-foreground'>

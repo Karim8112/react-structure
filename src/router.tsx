@@ -1,6 +1,7 @@
 import {
   Construction,
   Gem,
+  HouseIcon,
   Info,
   LayoutTemplate,
   List,
@@ -25,6 +26,11 @@ import Project from './features/projects/pages/index2'
 import ProjectTypes from './features/projects/pages/ProjectTypes'
 import UpdateProject from './features/projects/pages/UpdateProject'
 
+import AddHouse from './features/houses/pages/AddHouse'
+import House from './features/houses/pages/House'
+import HouseTypes from './features/houses/pages/HouseTypes'
+import ShowHouse from './features/houses/pages/ShowHouse'
+import UpdateHouse from './features/houses/pages/UpdateHouse'
 import AboutUs from './features/landing/aboutUs'
 import UpdateAboutUs from './features/landing/aboutUs/updateAboutUs'
 import AdditionalSection from './features/landing/additionalSection'
@@ -186,13 +192,43 @@ const privateRoutes = [
                 element: <ContactInfo />
               }
             ]
+          },
+          {
+            title: 'Estates',
+            icon: HouseIcon,
+            children: [
+              {
+                icon: Gem,
+                title: 'Estates Types',
+                path: routes.house_types,
+                element: <HouseTypes />
+              },
+              {
+                icon: Plus,
+                title: 'Add new House',
+                path: routes.add_house,
+                element: <AddHouse />
+              },
+              {
+                icon: List,
+                title: 'All Houses',
+                path: routes.houses,
+                element: <House />
+              },
+              {
+                hide: true,
+                title: 'show house',
+                path: `${routes.show_house}/:houseId`,
+                element: <ShowHouse />
+              },
+              {
+                hide: true,
+                title: 'edit house',
+                path: `${routes.update_house}/:houseId`,
+                element: <UpdateHouse />
+              }
+            ]
           }
-          // {
-          //   title: 'Payment',
-          //   path: '/payment',
-          //   icon: DollarSignIcon,
-          //   element: <Payments />
-          // },
         ]
       }
     ]

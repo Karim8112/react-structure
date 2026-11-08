@@ -15,6 +15,13 @@ export enum routes {
   add_video = '/video/add-video',
   update_video = '/video/update-video',
   videos = '/video',
+  add_house = '/house/add-house',
+  update_house = '/house/update-house',
+  houses = '/house',
+  show_house = '/show-house',
+  add_house_type = '/house/add-house-type',
+  update_house_type = '/house/update-house-type',
+  house_types = '/house-types',
   //
   hero = '/hero',
   what_we_do = '/what-we-do',
@@ -31,6 +38,8 @@ export enum APIs {
   project = '/project',
   project_type = '/project_type',
   video = '/video',
+  house_type = '/house_type',
+  house = '/house',
   //
   hero = '/hero',
   what_we_do = '/what-we-do',
